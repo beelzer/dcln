@@ -1,43 +1,44 @@
-# Astro Starter Kit: Minimal
+# dcln.me
+
+Personal portfolio site built with Astro 5 and deployed on Cloudflare Pages.
+
+## Stack
+
+- **Framework**: Astro 5 (hybrid rendering)
+- **Styling**: Vanilla CSS with modern features (nesting, `@layer`, `color-mix()`, scroll-driven animations)
+- **Hosting**: Cloudflare Pages
+- **Auth**: Cloudflare Access (Google OAuth) for private content
+
+## Development
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Commands
 
-## 🚀 Project Structure
+| Command            | Description              |
+| ------------------ | ------------------------ |
+| `npm run dev`      | Start dev server         |
+| `npm run build`    | Production build         |
+| `npm run check`    | TypeScript type checking |
+| `npm run lint`     | ESLint + Prettier check  |
+| `npm run lint:fix` | Auto-fix lint issues     |
 
-Inside of your Astro project, you'll see the following folders and files:
+## Project Structure
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+  components/    UI components (Astro)
+  content/       Markdown content collections
+  layouts/       Base page layout
+  lib/           Constants, auth utilities
+  pages/         Routes (public + private SSR)
+  styles/        Global CSS and design tokens
+public/          Static assets, security headers
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Deployment
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Pushes to `main` trigger automatic builds on Cloudflare Pages. CI runs lint, type check, and build in parallel via GitHub Actions.
