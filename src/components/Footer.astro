@@ -10,6 +10,9 @@ const year = new Date().getFullYear();
     <p class="footer__copy">
       &copy; {year}
       {SITE.author}
+      <span class="footer__version" title={`${SITE.version} (${SITE.commitHash})`}>
+        v{SITE.version}
+      </span>
     </p>
     <div class="footer__links">
       <a
@@ -44,6 +47,13 @@ const year = new Date().getFullYear();
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     color: var(--color-text-faint);
+  }
+
+  .footer__version {
+    color: var(--color-text-faint);
+    opacity: 0.5;
+    margin-left: var(--space-sm);
+    cursor: help;
   }
 
   .footer__links {

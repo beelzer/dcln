@@ -26,8 +26,13 @@ interface JWTPayload {
   nbf: number;
 }
 
+interface JWK extends JsonWebKey {
+  kid?: string;
+  kty?: string;
+}
+
 interface JWKS {
-  keys: JsonWebKey[];
+  keys: JWK[];
 }
 
 let cachedKeys: Map<string, CryptoKey> | null = null;
@@ -57,7 +62,7 @@ async function getPublicKeys(): Promise<Map<string, CryptoKey>> {
         false,
         ['verify'],
       );
-      keys.set(jwk.kid as string, key);
+      keys.set(jwk.kid!, key);
     }
   }
 
@@ -102,7 +107,12 @@ export async function verifyJWT(token: string): Promise<JWTPayload | null> {
     const signedData = new TextEncoder().encode(`${headerB64}.${payloadB64}`);
     const signature = base64urlDecode(signatureB64);
 
-    const valid = await crypto.subtle.verify('RSASSA-PKCS1-v1_5', key, signature, signedData);
+    const valid = await crypto.subtle.verify(
+      'RSASSA-PKCS1-v1_5',
+      key,
+      signature.buffer as ArrayBuffer,
+      signedData,
+    );
 
     if (!valid) return null;
 

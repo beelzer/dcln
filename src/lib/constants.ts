@@ -1,3 +1,5 @@
+declare const __COMMIT_HASH__: string;
+
 export const SITE = {
   name: 'dcln.me',
   title: 'dcln.me — Declan',
@@ -7,6 +9,8 @@ export const SITE = {
   github: 'https://github.com/beelzer',
   cfAccessTeamDomain: 'https://dcln.cloudflareaccess.com',
   featuredProjectsLimit: 3,
+  version: '0.1.0',
+  commitHash: __COMMIT_HASH__,
 } as const;
 
 /** How long to cache Cloudflare Access public keys (1 hour). */
