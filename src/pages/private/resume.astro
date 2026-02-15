@@ -1,0 +1,97 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BackLink from '../../components/BackLink.astro';
+import Icon from '../../components/Icon.astro';
+import { getAccessEmail } from '../../lib/auth';
+import { SITE } from '../../lib/constants';
+
+// Verify Cloudflare Access JWT signature
+const email = await getAccessEmail(Astro.request);
+
+if (!email) {
+  return Astro.redirect('/private');
+}
+---
+
+<BaseLayout title={`Resume — ${SITE.name}`} description={`${SITE.author}'s resume`}>
+  <section class="resume">
+    <div class="container container--narrow">
+      <BackLink href="/private" label="Back to private area" />
+
+      <h1 class="resume__title">Resume</h1>
+
+      <div class="resume__actions">
+        <a href="/private/download/resume" download class="resume__download">
+          <Icon name="download" size={18} />
+          Download PDF
+        </a>
+      </div>
+
+      <div class="resume__placeholder">
+        <p>Resume download is served via an authenticated API route.</p>
+        <p>
+          Place your resume in <code>src/private-assets/</code> and update the download endpoint.
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .resume {
+    padding: var(--space-3xl) 0;
+  }
+
+  .resume__title {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-xl);
+  }
+
+  .resume__actions {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .resume__download {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    padding: var(--space-sm) var(--space-xl);
+    background: var(--color-accent);
+    color: white;
+    border-radius: var(--radius-sm);
+    transition:
+      background var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+
+    &:hover {
+      background: var(--color-accent-hover);
+      color: white;
+      transform: translateY(-1px);
+    }
+  }
+
+  .resume__placeholder {
+    background: var(--color-bg-raised);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2xl);
+    text-align: center;
+
+    p {
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-sm);
+    }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      background: var(--color-bg-elevated);
+      padding: 0.15em 0.4em;
+      border-radius: var(--radius-sm);
+    }
+  }
+</style>

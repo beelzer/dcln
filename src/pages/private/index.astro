@@ -1,0 +1,145 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { getAccessEmail } from '../../lib/auth';
+import { SITE } from '../../lib/constants';
+
+// Verify Cloudflare Access JWT signature (not just header existence)
+const email = await getAccessEmail(Astro.request);
+const isAuthenticated = !!email;
+---
+
+<BaseLayout title={`Private Area — ${SITE.name}`} description="Private content area">
+  <section class="private">
+    <div class="container container--narrow">
+      <h1 class="private__title">
+        <Icon
+          name={isAuthenticated ? 'lock-open' : 'lock-closed'}
+          size={28}
+          class="private__lock"
+        />
+        Private Area
+      </h1>
+
+      {
+        isAuthenticated ? (
+          <div class="private__content">
+            <p class="private__welcome">
+              Welcome, <strong>{email}</strong>
+            </p>
+
+            <div class="private__grid">
+              <a href="/private/resume" class="private__card">
+                <Icon name="document" size={24} />
+                <span class="private__card-title">Resume / CV</span>
+                <span class="private__card-desc">View or download my resume</span>
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div class="private__locked">
+            <p>
+              This area is protected. If you've been given access, you should be redirected to sign
+              in automatically via Cloudflare Access.
+            </p>
+            <p class="private__note">
+              If you're seeing this page, Cloudflare Access may not be configured yet, or you're
+              running in local development.
+            </p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .private {
+    padding: var(--space-3xl) 0;
+  }
+
+  .private__title {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-2xl);
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+  }
+
+  .private__lock {
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .private__welcome {
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-2xl);
+
+    strong {
+      color: var(--color-accent);
+      font-weight: 500;
+    }
+  }
+
+  .private__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .private__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    padding: var(--space-xl);
+    background: var(--color-bg-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    transition:
+      border-color var(--duration-normal) var(--ease-out),
+      transform var(--duration-normal) var(--ease-out);
+
+    &:hover {
+      border-color: var(--color-accent);
+      color: var(--color-text);
+      transform: translateY(-2px);
+    }
+
+    svg {
+      color: var(--color-accent);
+    }
+  }
+
+  .private__card-title {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: var(--text-lg);
+  }
+
+  .private__card-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .private__locked {
+    background: var(--color-bg-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-2xl);
+
+    p:not(.private__note) {
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-md);
+    }
+  }
+
+  .private__note {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-faint);
+  }
+</style>

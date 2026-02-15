@@ -1,0 +1,62 @@
+---
+import Icon from './Icon.astro';
+import { SITE } from '../lib/constants';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer__inner container">
+    <p class="footer__copy">
+      &copy; {year}
+      {SITE.author}
+    </p>
+    <div class="footer__links">
+      <a
+        href={SITE.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub (opens in new window)"
+      >
+        <Icon name="github" size={18} />
+      </a>
+      <a href={`mailto:${SITE.email}`} aria-label="Email">
+        <Icon name="mail" size={18} />
+      </a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-xl) 0;
+    margin-top: var(--space-4xl);
+  }
+
+  .footer__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer__copy {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-faint);
+  }
+
+  .footer__links {
+    display: flex;
+    gap: var(--space-md);
+  }
+
+  .footer__links a {
+    color: var(--color-text-faint);
+    transition: color var(--duration-fast) var(--ease-out);
+
+    &:hover {
+      color: var(--color-text);
+    }
+  }
+</style>

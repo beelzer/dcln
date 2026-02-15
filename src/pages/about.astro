@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../lib/constants';
+---
+
+<BaseLayout title={`About — ${SITE.name}`} description={`About ${SITE.author}`}>
+  <section class="about">
+    <div class="container container--narrow">
+      <h1 class="about__title">About</h1>
+
+      <div class="about__content">
+        <p>
+          I'm {SITE.author} — I build things for the web. This site is a collection of projects I've worked
+          on, mostly vibe coded experiments and tools.
+        </p>
+
+        <p>
+          I'm interested in modern web technologies, clean design, and shipping things that work.
+        </p>
+      </div>
+
+      <div class="about__section reveal">
+        <h2 class="about__heading">Tech I Use</h2>
+        <div class="about__tags">
+          {
+            ['TypeScript', 'Astro', 'React', 'Node.js', 'CSS', 'Cloudflare', 'Git'].map((tech) => (
+              <span class="tag">{tech}</span>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="about__section reveal">
+        <h2 class="about__heading">Get in Touch</h2>
+        <div class="about__links">
+          <a href={`mailto:${SITE.email}`} class="about__link">
+            <Icon name="mail" size={18} />
+            {SITE.email}
+          </a>
+          <a href={SITE.github} target="_blank" rel="noopener noreferrer" class="about__link">
+            <Icon name="github" size={18} />
+            GitHub<span class="sr-only"> (opens in new window)</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about {
+    padding: var(--space-3xl) 0;
+  }
+
+  .about__title {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .about__content {
+    margin-bottom: var(--space-2xl);
+
+    p {
+      color: var(--color-text-muted);
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-md);
+      max-width: 60ch;
+    }
+  }
+
+  .about__section {
+    margin-bottom: var(--space-2xl);
+    padding-top: var(--space-2xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .about__heading {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-lg);
+  }
+
+  .about__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+
+  .about__links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .about__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    color: var(--color-text-muted);
+    width: fit-content;
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+</style>

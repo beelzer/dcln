@@ -1,0 +1,125 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  slug: string;
+  url?: string;
+  repo?: string;
+}
+
+const { title, description, tags, slug, url, repo } = Astro.props;
+---
+
+<article class="card">
+  <div class="card__content">
+    <h3 class="card__title">
+      <a href={`/projects/${slug}`} class="card__link">{title}</a>
+    </h3>
+    <p class="card__desc">{description}</p>
+    <div class="card__tags">
+      {tags.map((tag) => <span class="tag">{tag}</span>)}
+    </div>
+    <div class="card__actions">
+      {
+        url && (
+          <a href={url} target="_blank" rel="noopener noreferrer" class="card__action">
+            Live<span class="sr-only"> (opens in new window)</span>
+            <Icon name="arrow-up-right" size={12} />
+          </a>
+        )
+      }
+      {
+        repo && (
+          <a href={repo} target="_blank" rel="noopener noreferrer" class="card__action">
+            Source<span class="sr-only"> (opens in new window)</span>
+            <Icon name="arrow-up-right" size={12} />
+          </a>
+        )
+      }
+    </div>
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    background: var(--color-bg-raised);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    transition:
+      border-color var(--duration-normal) var(--ease-out),
+      transform var(--duration-normal) var(--ease-out);
+
+    &:hover {
+      border-color: var(--color-border-hover);
+      transform: translateY(-2px);
+    }
+
+    &:has(.card__link:hover) {
+      border-color: var(--color-accent);
+    }
+  }
+
+  .card__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .card__title {
+    font-size: var(--text-lg);
+    font-weight: 600;
+  }
+
+  .card__link {
+    color: var(--color-text);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+    }
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  .card__desc {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+
+  .card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-xs);
+  }
+
+  .card__actions {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-sm);
+    position: relative;
+    z-index: 1;
+  }
+
+  .card__action {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+
+    &:hover {
+      color: var(--color-accent);
+    }
+  }
+</style>

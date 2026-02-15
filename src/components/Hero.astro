@@ -1,0 +1,145 @@
+---
+import { SITE } from '../lib/constants';
+---
+
+<section class="hero">
+  <div class="hero__inner container">
+    <p class="hero__greeting">Hi, I'm</p>
+    <h1 class="hero__name">{SITE.author}</h1>
+    <p class="hero__tagline">I build things for the web.</p>
+    <div class="hero__cta">
+      <a href="/projects" class="hero__btn hero__btn--primary">View Projects</a>
+      <a href="/about" class="hero__btn hero__btn--ghost">About Me</a>
+    </div>
+    <div class="hero__decoration" aria-hidden="true">
+      <div class="hero__line"></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: flex;
+    align-items: center;
+    min-height: calc(100dvh - var(--header-height));
+    padding: var(--space-4xl) 0;
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .hero__greeting {
+    font-family: var(--font-mono);
+    font-size: var(--text-base);
+    color: var(--color-accent);
+  }
+
+  .hero__name {
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--color-text);
+  }
+
+  .hero__tagline {
+    font-size: var(--text-xl);
+    color: var(--color-text-muted);
+    max-width: 500px;
+  }
+
+  .hero__cta {
+    display: flex;
+    gap: var(--space-md);
+    margin-top: var(--space-lg);
+  }
+
+  /* Only animate on first page load, not on view transition navigations */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__greeting {
+      animation: fadeUp 0.6s var(--ease-out) both;
+    }
+    .hero__name {
+      animation: fadeUp 0.6s var(--ease-out) 0.1s both;
+    }
+    .hero__tagline {
+      animation: fadeUp 0.6s var(--ease-out) 0.2s both;
+    }
+    .hero__cta {
+      animation: fadeUp 0.6s var(--ease-out) 0.3s both;
+    }
+    .hero__decoration {
+      animation: fadeUp 0.6s var(--ease-out) 0.4s both;
+    }
+  }
+
+  .hero__btn {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    padding: var(--space-sm) var(--space-xl);
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    transition: all var(--duration-normal) var(--ease-out);
+  }
+
+  .hero__btn--primary {
+    background: var(--color-accent);
+    color: white;
+
+    &:hover {
+      background: var(--color-accent-hover);
+      color: white;
+      transform: translateY(-1px);
+    }
+  }
+
+  .hero__btn--ghost {
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+
+    &:hover {
+      border-color: var(--color-text-muted);
+      color: var(--color-text);
+      transform: translateY(-1px);
+    }
+  }
+
+  .hero__decoration {
+    margin-top: var(--space-3xl);
+  }
+
+  .hero__line {
+    width: 60px;
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      min-height: calc(80dvh - var(--header-height));
+    }
+
+    .hero__cta {
+      flex-direction: column;
+    }
+
+    .hero__btn {
+      text-align: center;
+      justify-content: center;
+    }
+  }
+</style>

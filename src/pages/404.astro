@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { SITE } from '../lib/constants';
+---
+
+<BaseLayout title={`404 — ${SITE.name}`} description="Page not found">
+  <section class="not-found">
+    <div class="container container--narrow">
+      <p class="not-found__code">404</p>
+      <h1 class="not-found__title">Page not found</h1>
+      <p class="not-found__desc">The page you're looking for doesn't exist or has been moved.</p>
+      <a href="/" class="not-found__link">
+        <Icon name="arrow-left" size={16} />
+        Go home
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding: var(--space-4xl) 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(80dvh - 140px);
+  }
+
+  .not-found__code {
+    font-family: var(--font-mono);
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--color-border);
+    line-height: 1;
+    margin-bottom: var(--space-md);
+  }
+
+  .not-found__title {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .not-found__desc {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-xl);
+  }
+
+  .not-found__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    padding: var(--space-sm) var(--space-xl);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    transition: all var(--duration-normal) var(--ease-out);
+
+    &:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+  }
+</style>

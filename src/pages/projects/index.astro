@@ -1,0 +1,79 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from '../../lib/constants';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+---
+
+<BaseLayout title={`Projects — ${SITE.name}`} description={`Projects built by ${SITE.author}`}>
+  <section class="projects">
+    <div class="container">
+      <header class="projects__header">
+        <h1 class="projects__title">Projects</h1>
+        <p class="projects__subtitle">Things I've built and tinkered with.</p>
+      </header>
+
+      <div class="projects__grid">
+        {
+          projects.map((project) => (
+            <div class="reveal">
+              <ProjectCard
+                title={project.data.title}
+                description={project.data.description}
+                tags={project.data.tags}
+                slug={project.id}
+                url={project.data.url}
+                repo={project.data.repo}
+              />
+            </div>
+          ))
+        }
+      </div>
+
+      {projects.length === 0 && <p class="projects__empty">No projects yet. Check back soon!</p>}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .projects {
+    padding: var(--space-3xl) 0;
+  }
+
+  .projects__header {
+    margin-bottom: var(--space-2xl);
+  }
+
+  .projects__title {
+    font-size: var(--text-3xl);
+    margin-bottom: var(--space-sm);
+  }
+
+  .projects__subtitle {
+    color: var(--color-text-muted);
+    font-size: var(--text-lg);
+  }
+
+  .projects__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--grid-card-min), 1fr));
+    gap: var(--space-lg);
+  }
+
+  .projects__empty {
+    text-align: center;
+    color: var(--color-text-faint);
+    padding: var(--space-4xl) 0;
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 640px) {
+    .projects__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
