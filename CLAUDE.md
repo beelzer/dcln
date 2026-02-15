@@ -16,6 +16,8 @@ Rules:
 - Summary under 70 characters
 - Use imperative mood ("add feature" not "added feature")
 - One blank line before `Co-Authored-By`
+- **One logical change per commit** — never bundle unrelated changes
+- When asked to "commit and push", review staged changes and split into separate commits if they cover different concerns (e.g. a bug fix + a new feature = 2 commits)
 
 Examples:
 
@@ -45,6 +47,23 @@ Examples:
 - Project content uses Astro Content Collections in `src/content/projects/`
 - Auth handled by Cloudflare Access (JWT verification in `src/lib/auth.ts`)
 - `public/_headers` controls Cloudflare security headers
+
+## Versioning (AUTOMATIC — do this on every commit and push)
+
+Version lives in `package.json` (single source of truth, injected at build time).
+
+**After committing all changes and before pushing**, automatically determine the version bump:
+
+- **patch** (0.1.0 → 0.1.1) — `fix`, `style`, `perf`, `chore` (dependency updates)
+- **minor** (0.1.0 → 0.2.0) — `feat` (new features, new pages, new components)
+- **major** (0.2.0 → 1.0.0) — breaking changes, major redesigns (rare, confirm with user first)
+- **no bump** — `ci`, `docs`, `refactor`-only changes, CLAUDE.md-only changes
+
+Use the highest applicable bump across all commits in the push. Then:
+
+1. Run `npm version patch/minor --no-git-tag-version`
+2. Commit with message `chore: bump version to X.Y.Z`
+3. Push all commits together
 
 ## Don'ts
 
