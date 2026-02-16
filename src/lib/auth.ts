@@ -24,7 +24,9 @@ interface JWTPayload {
   exp: number;
   iat: number;
   nbf: number;
+  picture?: string;
   custom?: Record<string, string>;
+  [key: string]: unknown;
 }
 
 interface JWK extends JsonWebKey {
@@ -175,9 +177,12 @@ export async function getAccessSession(request: Request): Promise<AccessSession 
   const payload = await verifyJWT(jwt);
   if (!payload) return null;
 
+  // Picture may be at top level, under custom, or absent depending on CF Access config
+  const picture = payload.picture ?? payload.custom?.picture ?? null;
+
   return {
     email: payload.email,
-    picture: payload.custom?.picture ?? null,
+    picture,
     issuedAt: new Date(payload.iat * 1000),
     expiresAt: new Date(payload.exp * 1000),
   };
