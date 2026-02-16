@@ -52,7 +52,7 @@ Examples:
 
 Version lives in `package.json` (single source of truth, injected at build time).
 
-**After committing all changes and before pushing**, automatically determine the version bump:
+**After committing all changes and before pushing the branch**, automatically determine the version bump:
 
 - **patch** (0.1.0 → 0.1.1) — `fix`, `style`, `perf`, `chore` (dependency updates)
 - **minor** (0.1.0 → 0.2.0) — `feat` (new features, new pages, new components)
@@ -63,7 +63,22 @@ Use the highest applicable bump across all commits in the push. Then:
 
 1. Run `npm version patch/minor --no-git-tag-version`
 2. Commit with message `chore: bump version to X.Y.Z`
-3. Push all commits together
+3. Push the branch and open a PR
+
+## Git Workflow
+
+Branch protection is active on `main` — direct pushes are blocked.
+
+When asked to "commit and push" or when changes need to go to the repo:
+
+1. Create a feature branch from `main` (e.g. `feat/add-filtering`, `fix/nav-flash`)
+2. Make commits on that branch (split by logical change as usual)
+3. Apply the version bump commit if applicable (see Versioning above)
+4. Push the branch and open a PR via `gh pr create`
+5. CI (Build) must pass before merging
+6. User merges the PR on GitHub
+
+Branch naming: `<type>/<short-description>` matching the primary commit type.
 
 ## Don'ts
 
