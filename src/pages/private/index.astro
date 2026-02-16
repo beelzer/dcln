@@ -49,6 +49,13 @@ const isAuthenticated = !!session;
                       timeStyle: 'short',
                     })}
                   </span>
+                  <span class="private__separator">·</span>
+                  <a
+                    href={`${SITE.cfAccessTeamDomain}/cdn-cgi/access/logout`}
+                    class="private__logout"
+                  >
+                    Sign out
+                  </a>
                 </div>
               </div>
             </div>
@@ -167,9 +174,24 @@ const isAuthenticated = !!session;
   }
 
   .private__session {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     color: var(--color-text-faint);
+  }
+
+  .private__separator {
+    color: var(--color-border);
+  }
+
+  .private__logout {
+    color: var(--color-text-faint);
+
+    &:hover {
+      color: var(--color-accent);
+    }
   }
 
   .private__locked {
