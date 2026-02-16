@@ -8,7 +8,7 @@ export const SITE = {
   author: 'Declan',
   email: 'contact@dcln.me',
   github: 'https://github.com/beelzer',
-  cfAccessTeamDomain: 'https://dcln.cloudflareaccess.com',
+  cfAccessTeamDomain: 'https://dcln-me.cloudflareaccess.com',
   featuredProjectsLimit: 3,
   version: __VERSION__,
   commitHash: __COMMIT_HASH__,

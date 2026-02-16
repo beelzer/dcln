@@ -3,12 +3,11 @@ export const prerender = false;
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
-import { getAccessEmail } from '../../lib/auth';
+import { getAccessSession } from '../../lib/auth';
 import { SITE } from '../../lib/constants';
 
-// Verify Cloudflare Access JWT signature (not just header existence)
-const email = await getAccessEmail(Astro.request);
-const isAuthenticated = !!email;
+const session = await getAccessSession(Astro.request);
+const isAuthenticated = !!session;
 ---
 
 <BaseLayout title={`Private Area — ${SITE.name}`} description="Private content area">
@@ -26,15 +25,45 @@ const isAuthenticated = !!email;
       {
         isAuthenticated ? (
           <div class="private__content">
-            <p class="private__welcome">
-              Welcome, <strong>{email}</strong>
-            </p>
+            <div class="private__user">
+              {session.picture && (
+                <img
+                  src={session.picture}
+                  alt=""
+                  class="private__avatar"
+                  width="48"
+                  height="48"
+                  referrerpolicy="no-referrer"
+                />
+              )}
+              <div>
+                <p class="private__welcome">
+                  Welcome, <strong>{session.email}</strong>
+                </p>
+                <div class="private__session">
+                  <span>
+                    Session expires{' '}
+                    {session.expiresAt.toLocaleString('en-AU', {
+                      timeZone: 'Australia/Sydney',
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    })}
+                  </span>
+                </div>
+              </div>
+            </div>
 
             <div class="private__grid">
               <a href="/private/resume" class="private__card">
                 <Icon name="document" size={24} />
                 <span class="private__card-title">Resume / CV</span>
                 <span class="private__card-desc">View or download my resume</span>
+              </a>
+
+              <a href="/private/contact" class="private__card">
+                <Icon name="mail" size={24} />
+                <span class="private__card-title">Contact Info</span>
+                <span class="private__card-desc">Phone, email, and other details</span>
               </a>
             </div>
           </div>
@@ -73,10 +102,22 @@ const isAuthenticated = !!email;
     flex-shrink: 0;
   }
 
+  .private__user {
+    display: flex;
+    align-items: center;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-2xl);
+  }
+
+  .private__avatar {
+    border-radius: 50%;
+    border: 2px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
   .private__welcome {
     color: var(--color-text-muted);
     font-size: var(--text-lg);
-    margin-bottom: var(--space-2xl);
 
     strong {
       color: var(--color-accent);
@@ -123,6 +164,12 @@ const isAuthenticated = !!email;
   .private__card-desc {
     font-size: var(--text-sm);
     color: var(--color-text-muted);
+  }
+
+  .private__session {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-faint);
   }
 
   .private__locked {
