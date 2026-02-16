@@ -1,4 +1,5 @@
 declare const __COMMIT_HASH__: string;
+declare const __VERSION__: string;
 
 export const SITE = {
   name: 'dcln.me',
@@ -7,9 +8,9 @@ export const SITE = {
   author: 'Declan',
   email: 'contact@dcln.me',
   github: 'https://github.com/beelzer',
-  cfAccessTeamDomain: 'https://dcln.cloudflareaccess.com',
+  cfAccessTeamDomain: 'https://dcln-me.cloudflareaccess.com',
   featuredProjectsLimit: 3,
-  version: '0.1.0',
+  version: __VERSION__,
   commitHash: __COMMIT_HASH__,
 } as const;
 

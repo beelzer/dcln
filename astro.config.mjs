@@ -2,8 +2,10 @@
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 import { execSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 
 const commitHash = execSync('git rev-parse --short HEAD').toString().trim();
+const { version } = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 export default defineConfig({
   site: 'https://dcln.me',
@@ -11,6 +13,7 @@ export default defineConfig({
   vite: {
     define: {
       __COMMIT_HASH__: JSON.stringify(commitHash),
+      __VERSION__: JSON.stringify(version),
     },
   },
 });
