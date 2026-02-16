@@ -24,6 +24,7 @@ interface JWTPayload {
   exp: number;
   iat: number;
   nbf: number;
+  custom?: Record<string, string>;
 }
 
 interface JWK extends JsonWebKey {
@@ -154,4 +155,30 @@ export async function getAccessEmail(request: Request): Promise<string | null> {
 
   const payload = await verifyJWT(jwt);
   return payload?.email ?? null;
+}
+
+export interface AccessSession {
+  email: string;
+  picture: string | null;
+  issuedAt: Date;
+  expiresAt: Date;
+}
+
+/**
+ * Get full session info from Cloudflare Access JWT.
+ * Returns session details if valid, null otherwise.
+ */
+export async function getAccessSession(request: Request): Promise<AccessSession | null> {
+  const jwt = request.headers.get('cf-access-jwt-assertion');
+  if (!jwt) return null;
+
+  const payload = await verifyJWT(jwt);
+  if (!payload) return null;
+
+  return {
+    email: payload.email,
+    picture: payload.custom?.picture ?? null,
+    issuedAt: new Date(payload.iat * 1000),
+    expiresAt: new Date(payload.exp * 1000),
+  };
 }
