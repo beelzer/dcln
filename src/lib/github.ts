@@ -2,6 +2,8 @@
  * GitHub API utilities for fetching repository content at build time.
  */
 
+import { highlightCodeBlocks } from './highlight';
+
 /** Parse a GitHub repo URL into owner and repo name. */
 function parseGitHubUrl(url: string): { owner: string; repo: string } | null {
   const match = url.match(/github\.com\/([^/]+)\/([^/]+)/);
@@ -41,7 +43,8 @@ export async function fetchReadmeHtml(repoUrl: string): Promise<string | null> {
       );
       return null;
     }
-    return await response.text();
+    const rawHtml = await response.text();
+    return highlightCodeBlocks(rawHtml);
   } catch (error) {
     console.warn(`[github] README fetch error for ${parsed.owner}/${parsed.repo}:`, error);
     return null;
