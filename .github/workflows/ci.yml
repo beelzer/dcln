@@ -139,23 +139,11 @@ jobs:
           path: dist/
 
       - uses: treosh/lighthouse-ci-action@v12
-        id: lhci-mobile
+        id: lhci
         with:
           configPath: lighthouserc.cjs
           uploadArtifacts: true
           temporaryPublicStorage: true
-          artifactName: lighthouse-mobile
-
-      - name: Save mobile results
-        run: mv .lighthouseci .lighthouseci-mobile
-
-      - uses: treosh/lighthouse-ci-action@v12
-        id: lhci-desktop
-        with:
-          configPath: lighthouserc.desktop.cjs
-          uploadArtifacts: true
-          temporaryPublicStorage: true
-          artifactName: lighthouse-desktop
 
       - name: Post Lighthouse comment
         uses: actions/github-script@v7
@@ -176,42 +164,30 @@ jobs:
               return value >= 1000 ? `${(value / 1000).toFixed(1)}s` : `${Math.round(value)}ms`;
             };
 
-            const buildRows = (manifest, links, device) => {
-              let rows = '';
-              for (const entry of manifest) {
-                const url = new URL(entry.url).pathname;
-                const s = entry.summary;
-                const reportUrl = links[entry.url] || '';
-                const page = `[${url}](${reportUrl})`;
+            const manifest = JSON.parse(fs.readFileSync('.lighthouseci/manifest.json', 'utf8'));
+            const links = JSON.parse('${{ steps.lhci.outputs.links }}');
 
-                const lhr = JSON.parse(fs.readFileSync(entry.jsonPath, 'utf8'));
-                const a = lhr.audits;
-                const fcp = ms(a['first-contentful-paint']?.numericValue);
-                const lcp = ms(a['largest-contentful-paint']?.numericValue);
-                const tbt = ms(a['total-blocking-time']?.numericValue);
-                const cls = a['cumulative-layout-shift']?.numericValue?.toFixed(3) ?? '—';
+            let rows = '';
+            for (const entry of manifest) {
+              const url = new URL(entry.url).pathname;
+              const s = entry.summary;
+              const reportUrl = links[entry.url] || '';
+              const page = `[${url}](${reportUrl})`;
 
-                rows += `| ${page} | ${device} | ${badge(s.performance)} | ${badge(s.accessibility)} | ${badge(s['best-practices'])} | ${badge(s.seo)} | ${fcp} | ${lcp} | ${tbt} | ${cls} |\n`;
-              }
-              return rows;
-            };
+              const lhr = JSON.parse(fs.readFileSync(entry.jsonPath, 'utf8'));
+              const a = lhr.audits;
+              const fcp = ms(a['first-contentful-paint']?.numericValue);
+              const lcp = ms(a['largest-contentful-paint']?.numericValue);
+              const tbt = ms(a['total-blocking-time']?.numericValue);
+              const cls = a['cumulative-layout-shift']?.numericValue?.toFixed(3) ?? '—';
 
-            const mobileManifest = JSON.parse(fs.readFileSync('.lighthouseci-mobile/manifest.json', 'utf8'));
-            for (const entry of mobileManifest) {
-              entry.jsonPath = entry.jsonPath.replace(/\.lighthouseci\//, '.lighthouseci-mobile/');
+              rows += `| ${page} | ${badge(s.performance)} | ${badge(s.accessibility)} | ${badge(s['best-practices'])} | ${badge(s.seo)} | ${fcp} | ${lcp} | ${tbt} | ${cls} |\n`;
             }
-            const mobileLinks = JSON.parse('${{ steps.lhci-mobile.outputs.links }}');
-
-            const desktopManifest = JSON.parse(fs.readFileSync('.lighthouseci/manifest.json', 'utf8'));
-            const desktopLinks = JSON.parse('${{ steps.lhci-desktop.outputs.links }}');
-
-            const rows = buildRows(mobileManifest, mobileLinks, 'Mobile') +
-                         buildRows(desktopManifest, desktopLinks, 'Desktop');
 
             const body = `## Lighthouse Report
 
-            | Page | Device | Performance | Accessibility | Best Practices | SEO | FCP | LCP | TBT | CLS |
-            |------|--------|:-----------:|:-------------:|:--------------:|:---:|:---:|:---:|:---:|:---:|
+            | Page | Performance | Accessibility | Best Practices | SEO | FCP | LCP | TBT | CLS |
+            |------|:-----------:|:-------------:|:--------------:|:---:|:---:|:---:|:---:|:---:|
             ${rows}`.replace(/^            /gm, '');
 
             const marker = '## Lighthouse Report';
