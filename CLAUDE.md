@@ -15,6 +15,7 @@ Rules:
 - Lowercase everything, no period at the end
 - Summary under 70 characters
 - Use imperative mood ("add feature" not "added feature")
+- `Co-Authored-By` goes on the **last commit only** (squash merge concatenates all messages — avoid duplicates)
 - One blank line before `Co-Authored-By`
 - **One logical change per commit** — never bundle unrelated changes
 - When asked to "commit and push", review staged changes and split into separate commits if they cover different concerns (e.g. a bug fix + a new feature = 2 commits)
@@ -23,8 +24,12 @@ Examples:
 
 - `feat: add project filtering by tech stack`
 - `fix: resolve navigation flash on back button`
+- `refactor: extract shared layout into base component`
+- `style: format config files with prettier`
+- `docs: add deployment instructions to readme`
 - `chore: update dependencies`
 - `ci: add parallel lint and typecheck jobs`
+- `perf: lazy load project card images`
 
 ## Project
 
@@ -79,6 +84,12 @@ When asked to "commit and push" or when changes need to go to the repo:
 6. User merges the PR on GitHub
 
 Branch naming: `<type>/<short-description>` matching the primary commit type.
+
+## Pull Requests
+
+- PR body should contain only a `## Summary` section with 1–3 bullet points
+- Do **not** include a test plan section — CI handles that
+- Do **not** include a "Generated with Claude Code" footer or any AI attribution line
 
 ## Don'ts
 
