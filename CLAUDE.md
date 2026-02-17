@@ -15,8 +15,7 @@ Rules:
 - Lowercase everything, no period at the end
 - Summary under 70 characters
 - Use imperative mood ("add feature" not "added feature")
-- `Co-Authored-By` goes on the **last commit only** (squash merge concatenates all messages — avoid duplicates)
-- One blank line before `Co-Authored-By`
+- Do **not** add `Co-Authored-By` trailers — GitHub adds them automatically during squash merge
 - **One logical change per commit** — never bundle unrelated changes
 - When asked to "commit and push", review staged changes and split into separate commits if they cover different concerns (e.g. a bug fix + a new feature = 2 commits)
 
