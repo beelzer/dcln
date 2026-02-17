@@ -3,7 +3,7 @@
    Dark minimal portfolio
    ============================================ */
 
-@layer reset, base, components, utilities;
+@layer reset, base, components, markdown, utilities;
 
 /* --- Reset --- */
 @layer reset {

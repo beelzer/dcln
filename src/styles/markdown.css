@@ -1,0 +1,522 @@
+/* ============================================
+   GitHub-style Markdown Content
+   Comprehensive styling for rendered README HTML
+   fetched from the GitHub API.
+   ============================================ */
+
+@layer markdown {
+  /* --- Base --- */
+
+  .project__content {
+    line-height: var(--leading-normal);
+    word-wrap: break-word;
+
+    /* Alert color tokens (scoped — not global) */
+    --color-alert-note: #58a6ff;
+    --color-alert-tip: #3fb950;
+    --color-alert-important: #a371f7;
+    --color-alert-warning: #d29922;
+    --color-alert-caution: #f85149;
+  }
+
+  /* Strip GitHub's wrapper styling — we control layout */
+  .project__content .markdown-body {
+    font-size: inherit;
+    font-family: inherit;
+    line-height: inherit;
+    color: inherit;
+    background: none;
+  }
+
+  /* First/last child margin collapsing */
+  .project__content > :first-child,
+  .project__content .markdown-body > :first-child {
+    margin-top: 0;
+  }
+
+  .project__content > :last-child,
+  .project__content .markdown-body > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* Hide the README's h1 — the page already has its own title in the header */
+  .project__content > .markdown-body > .markdown-heading:first-child,
+  .project__content > #readme > .markdown-body > .markdown-heading:first-child {
+    display: none;
+  }
+
+  /* Hide GitHub's copy-to-clipboard button (requires JS we don't ship) */
+  .project__content .zeroclipboard-container {
+    display: none;
+  }
+
+  /* --- Headings --- */
+
+  .project__content .markdown-heading {
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .project__content .markdown-heading:first-child {
+    margin-top: 0;
+  }
+
+  .project__content h1,
+  .project__content h2,
+  .project__content h3,
+  .project__content h4,
+  .project__content h5,
+  .project__content h6 {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    line-height: var(--leading-tight);
+  }
+
+  .project__content h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .project__content h2 {
+    font-size: var(--text-xl);
+  }
+
+  .project__content h3 {
+    font-size: var(--text-lg);
+  }
+
+  .project__content h4 {
+    font-size: var(--text-base);
+  }
+
+  .project__content h5 {
+    font-size: var(--text-sm);
+  }
+
+  .project__content h6 {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  /* GitHub signature: h1 and h2 get a bottom border */
+  .project__content h1,
+  .project__content h2 {
+    padding-bottom: var(--space-sm);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  /* Heading anchor links — hidden by default, visible on hover */
+  .project__content .anchor {
+    float: left;
+    padding-right: var(--space-xs);
+    margin-left: -20px;
+    line-height: 1;
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-out);
+    text-decoration: none;
+  }
+
+  .project__content .markdown-heading:hover .anchor,
+  .project__content .anchor:focus-visible {
+    opacity: 1;
+  }
+
+  .project__content .anchor .octicon-link {
+    fill: var(--color-text-muted);
+    vertical-align: middle;
+  }
+
+  /* --- Body Text --- */
+
+  .project__content p {
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+  }
+
+  .project__content strong,
+  .project__content b {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+
+  .project__content em {
+    font-style: italic;
+  }
+
+  .project__content a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .project__content a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  /* --- Inline Elements --- */
+
+  .project__content del,
+  .project__content s {
+    color: var(--color-text-faint);
+    text-decoration: line-through;
+  }
+
+  .project__content sup,
+  .project__content sub {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  .project__content sup {
+    top: -0.5em;
+  }
+
+  .project__content sub {
+    bottom: -0.25em;
+  }
+
+  .project__content mark {
+    background: color-mix(in oklch, var(--color-accent), transparent 70%);
+    color: var(--color-text);
+    padding: 0.1em 0.3em;
+    border-radius: 2px;
+  }
+
+  .project__content abbr[title] {
+    text-decoration: underline dotted;
+    cursor: help;
+  }
+
+  /* --- Keyboard Input --- */
+
+  .project__content kbd {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    line-height: 1;
+    padding: 0.2em 0.4em;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border-hover);
+    border-bottom-width: 2px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text);
+    box-shadow: inset 0 -1px 0 var(--color-border);
+    vertical-align: baseline;
+  }
+
+  /* --- Lists --- */
+
+  .project__content ul,
+  .project__content ol {
+    color: var(--color-text-muted);
+    padding-left: var(--space-xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .project__content li {
+    margin-bottom: var(--space-xs);
+  }
+
+  .project__content li > p {
+    margin-bottom: var(--space-xs);
+  }
+
+  /* Nested list spacing */
+  .project__content li > ul,
+  .project__content li > ol {
+    margin-top: var(--space-xs);
+    margin-bottom: 0;
+  }
+
+  /* Nested list type differentiation */
+  .project__content ol ol {
+    list-style-type: lower-alpha;
+  }
+  .project__content ol ol ol {
+    list-style-type: lower-roman;
+  }
+  .project__content ul ul {
+    list-style-type: circle;
+  }
+  .project__content ul ul ul {
+    list-style-type: square;
+  }
+
+  /* --- Task Lists --- */
+
+  .project__content .contains-task-list {
+    list-style: none;
+    padding-left: var(--space-lg);
+  }
+
+  .project__content .task-list-item {
+    position: relative;
+    padding-left: var(--space-xs);
+  }
+
+  .project__content .task-list-item-checkbox {
+    margin-right: var(--space-sm);
+    vertical-align: middle;
+    accent-color: var(--color-accent);
+  }
+
+  /* --- Blockquotes --- */
+
+  .project__content blockquote {
+    border-left: 3px solid var(--color-border);
+    padding: 0 var(--space-lg);
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-md);
+  }
+
+  .project__content blockquote > :last-child {
+    margin-bottom: 0;
+  }
+
+  /* --- Alerts / Callouts --- */
+
+  .project__content .markdown-alert {
+    padding: var(--space-sm) var(--space-lg);
+    margin-bottom: var(--space-md);
+    border-left: 3px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-raised);
+  }
+
+  .project__content .markdown-alert > :last-child {
+    margin-bottom: 0;
+  }
+
+  .project__content .markdown-alert-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+  }
+
+  .project__content .markdown-alert-title .octicon {
+    fill: currentColor;
+    flex-shrink: 0;
+  }
+
+  .project__content .markdown-alert-note {
+    border-left-color: var(--color-alert-note);
+  }
+  .project__content .markdown-alert-note .markdown-alert-title {
+    color: var(--color-alert-note);
+  }
+
+  .project__content .markdown-alert-tip {
+    border-left-color: var(--color-alert-tip);
+  }
+  .project__content .markdown-alert-tip .markdown-alert-title {
+    color: var(--color-alert-tip);
+  }
+
+  .project__content .markdown-alert-important {
+    border-left-color: var(--color-alert-important);
+  }
+  .project__content .markdown-alert-important .markdown-alert-title {
+    color: var(--color-alert-important);
+  }
+
+  .project__content .markdown-alert-warning {
+    border-left-color: var(--color-alert-warning);
+  }
+  .project__content .markdown-alert-warning .markdown-alert-title {
+    color: var(--color-alert-warning);
+  }
+
+  .project__content .markdown-alert-caution {
+    border-left-color: var(--color-alert-caution);
+  }
+  .project__content .markdown-alert-caution .markdown-alert-title {
+    color: var(--color-alert-caution);
+  }
+
+  /* --- Horizontal Rules --- */
+
+  .project__content hr {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: var(--space-2xl) 0;
+  }
+
+  /* --- Code --- */
+
+  .project__content code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-bg-elevated);
+    padding: 0.15em 0.4em;
+    border-radius: var(--radius-sm);
+  }
+
+  .project__content pre {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    overflow-x: auto;
+    margin-bottom: var(--space-md);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+  }
+
+  .project__content pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+    font-size: inherit;
+    border-radius: 0;
+  }
+
+  /* GitHub highlight wrapper div */
+  .project__content .highlight {
+    margin-bottom: var(--space-md);
+  }
+
+  .project__content .highlight pre {
+    margin-bottom: 0;
+  }
+
+  /* Snippet clipboard wrapper */
+  .project__content .snippet-clipboard-content {
+    margin-bottom: var(--space-md);
+  }
+
+  .project__content .snippet-clipboard-content pre {
+    margin-bottom: 0;
+  }
+
+  /* --- Tables --- */
+
+  /* GitHub's custom element wrapper */
+  .project__content markdown-accessiblity-table {
+    display: block;
+    margin-bottom: var(--space-md);
+    overflow-x: auto;
+  }
+
+  .project__content table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+  }
+
+  .project__content thead {
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .project__content th {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    text-align: left;
+    padding: var(--space-sm) var(--space-md);
+    color: var(--color-text);
+  }
+
+  .project__content td {
+    padding: var(--space-sm) var(--space-md);
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .project__content tr:hover {
+    background: var(--color-bg-elevated);
+  }
+
+  .project__content markdown-accessiblity-table table {
+    margin-bottom: 0;
+  }
+
+  /* --- Images --- */
+
+  .project__content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Badge images (inline in paragraphs) */
+  .project__content p a img,
+  .project__content p > img {
+    display: inline-block;
+    vertical-align: middle;
+    height: 20px;
+    border-radius: 3px;
+  }
+
+  /* --- Definition Lists --- */
+
+  .project__content dl {
+    margin-bottom: var(--space-md);
+  }
+
+  .project__content dt {
+    font-weight: 600;
+    color: var(--color-text);
+    margin-top: var(--space-md);
+  }
+
+  .project__content dt:first-child {
+    margin-top: 0;
+  }
+
+  .project__content dd {
+    padding-left: var(--space-xl);
+    margin-bottom: var(--space-sm);
+    color: var(--color-text-muted);
+  }
+
+  /* --- Details / Summary --- */
+
+  .project__content details {
+    margin-bottom: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-lg);
+  }
+
+  .project__content details[open] {
+    padding-bottom: var(--space-lg);
+  }
+
+  .project__content summary {
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    padding: var(--space-sm) 0;
+    list-style: none;
+  }
+
+  .project__content summary::marker,
+  .project__content summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .project__content summary::before {
+    content: '\25B6';
+    display: inline-block;
+    margin-right: var(--space-sm);
+    font-size: 0.7em;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .project__content details[open] > summary::before {
+    transform: rotate(90deg);
+  }
+
+  .project__content details > :last-child {
+    margin-bottom: 0;
+  }
+
+  .project__content details > summary + * {
+    margin-top: var(--space-md);
+  }
+}
