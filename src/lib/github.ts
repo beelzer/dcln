@@ -19,7 +19,10 @@ function parseGitHubUrl(url: string): { owner: string; repo: string } | null {
  */
 export async function fetchReadmeHtml(repoUrl: string): Promise<string | null> {
   const parsed = parseGitHubUrl(repoUrl);
-  if (!parsed) return null;
+  if (!parsed) {
+    console.warn('[github] invalid GitHub URL:', repoUrl);
+    return null;
+  }
 
   try {
     const response = await fetch(
@@ -32,9 +35,15 @@ export async function fetchReadmeHtml(repoUrl: string): Promise<string | null> {
       },
     );
 
-    if (!response.ok) return null;
+    if (!response.ok) {
+      console.warn(
+        `[github] README fetch failed for ${parsed.owner}/${parsed.repo}: ${response.status}`,
+      );
+      return null;
+    }
     return await response.text();
-  } catch {
+  } catch (error) {
+    console.warn(`[github] README fetch error for ${parsed.owner}/${parsed.repo}:`, error);
     return null;
   }
 }

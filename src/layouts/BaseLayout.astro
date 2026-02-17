@@ -38,6 +38,29 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:image" content={new URL('/og-image.png', Astro.site).href} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL('/og-image.png', Astro.site).href} />
+
+    <meta name="robots" content="index, follow" />
+
+    <!-- Structured Data -->
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: SITE.author,
+        url: Astro.site?.href,
+        sameAs: [SITE.github],
+        email: SITE.email,
+      })}
+    />
 
     <title>{title}</title>
     <ClientRouter />
