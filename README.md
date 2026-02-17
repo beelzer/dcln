@@ -1,5 +1,11 @@
 # dcln.me
 
+![CI](https://github.com/beelzer/dcln/actions/workflows/ci.yml/badge.svg)
+![Astro](https://img.shields.io/badge/Astro-5-bc52ee?logo=astro&logoColor=white)
+![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-deployed-f38020?logo=cloudflare&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow)
+
 Personal portfolio site built with Astro 5 and deployed on Cloudflare Pages.
 
 ## Stack
