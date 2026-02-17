@@ -144,6 +144,7 @@ jobs:
           configPath: lighthouserc.cjs
           uploadArtifacts: true
           temporaryPublicStorage: true
+          artifactName: lighthouse-mobile
 
       - name: Save mobile results
         run: mv .lighthouseci .lighthouseci-mobile
@@ -154,6 +155,7 @@ jobs:
           configPath: lighthouserc.desktop.cjs
           uploadArtifacts: true
           temporaryPublicStorage: true
+          artifactName: lighthouse-desktop
 
       - name: Post Lighthouse comment
         uses: actions/github-script@v7
