@@ -24,13 +24,15 @@ npm run dev
 
 ## Commands
 
-| Command            | Description              |
-| ------------------ | ------------------------ |
-| `npm run dev`      | Start dev server         |
-| `npm run build`    | Production build         |
-| `npm run check`    | TypeScript type checking |
-| `npm run lint`     | ESLint + Prettier check  |
-| `npm run lint:fix` | Auto-fix lint issues     |
+| Command             | Description              |
+| ------------------- | ------------------------ |
+| `npm run dev`       | Start dev server         |
+| `npm run build`     | Production build         |
+| `npm run check`     | TypeScript type checking |
+| `npm run lint`      | ESLint + Prettier check  |
+| `npm run lint:fix`  | Auto-fix lint issues     |
+| `npm run test:unit` | Run Vitest unit tests    |
+| `npm run test:e2e`  | Run Playwright E2E tests |
 
 ## Project Structure
 
@@ -45,6 +47,10 @@ src/
 public/          Static assets, security headers
 ```
 
+## Contributing
+
+See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for commit conventions and workflow.
+
 ## Deployment
 
-Pushes to `main` trigger automatic builds on Cloudflare Pages. CI runs lint, type check, and build in parallel via GitHub Actions.
+Pushes to `main` trigger automatic builds on Cloudflare Pages. CI runs lint, type check, unit tests, build, and E2E tests via GitHub Actions.
