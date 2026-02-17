@@ -26,7 +26,7 @@ const featuredProjects = (await getCollection('projects'))
               <Icon name="arrow-right" size={14} />
             </a>
           </div>
-          <div class="featured__grid">
+          <div class="card-grid">
             {featuredProjects.map((project) => (
               <ProjectCard
                 title={project.data.title}
@@ -70,18 +70,6 @@ const featuredProjects = (await getCollection('projects'))
 
     &:hover {
       color: var(--color-accent);
-    }
-  }
-
-  .featured__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--grid-card-min), 1fr));
-    gap: var(--space-lg);
-  }
-
-  @media (max-width: 640px) {
-    .featured__grid {
-      grid-template-columns: 1fr;
     }
   }
 </style>

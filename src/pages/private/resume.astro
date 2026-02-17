@@ -23,7 +23,7 @@ if (!email) {
       <h1 class="resume__title">Resume</h1>
 
       <div class="resume__actions">
-        <a href="/private/download/resume" download class="resume__download">
+        <a href="/private/download/resume" download class="btn btn--primary resume__download">
           <Icon name="download" size={18} />
           Download PDF
         </a>
@@ -54,24 +54,7 @@ if (!email) {
   }
 
   .resume__download {
-    display: inline-flex;
-    align-items: center;
     gap: var(--space-sm);
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    padding: var(--space-sm) var(--space-xl);
-    background: var(--color-accent);
-    color: white;
-    border-radius: var(--radius-sm);
-    transition:
-      background var(--duration-fast) var(--ease-out),
-      transform var(--duration-fast) var(--ease-out);
-
-    &:hover {
-      background: var(--color-accent-hover);
-      color: white;
-      transform: translateY(-1px);
-    }
   }
 
   .resume__placeholder {

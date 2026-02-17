@@ -8,8 +8,8 @@ import { SITE } from '../lib/constants';
     <h1 class="hero__name">{SITE.author}</h1>
     <p class="hero__tagline">I build things for the web.</p>
     <div class="hero__cta">
-      <a href="/projects" class="hero__btn hero__btn--primary">View Projects</a>
-      <a href="/about" class="hero__btn hero__btn--ghost">About Me</a>
+      <a href="/projects" class="btn btn--primary">View Projects</a>
+      <a href="/about" class="btn btn--ghost">About Me</a>
     </div>
     <div class="hero__decoration" aria-hidden="true">
       <div class="hero__line"></div>
@@ -75,38 +75,6 @@ import { SITE } from '../lib/constants';
     }
   }
 
-  .hero__btn {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    padding: var(--space-sm) var(--space-xl);
-    border-radius: var(--radius-sm);
-    display: inline-flex;
-    align-items: center;
-    transition: all var(--duration-normal) var(--ease-out);
-  }
-
-  .hero__btn--primary {
-    background: var(--color-accent);
-    color: white;
-
-    &:hover {
-      background: var(--color-accent-hover);
-      color: white;
-      transform: translateY(-1px);
-    }
-  }
-
-  .hero__btn--ghost {
-    border: 1px solid var(--color-border);
-    color: var(--color-text-muted);
-
-    &:hover {
-      border-color: var(--color-text-muted);
-      color: var(--color-text);
-      transform: translateY(-1px);
-    }
-  }
-
   .hero__decoration {
     margin-top: var(--space-3xl);
   }
@@ -137,7 +105,7 @@ import { SITE } from '../lib/constants';
       flex-direction: column;
     }
 
-    .hero__btn {
+    .hero__cta :global(.btn) {
       text-align: center;
       justify-content: center;
     }

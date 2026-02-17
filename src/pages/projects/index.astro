@@ -17,7 +17,7 @@ const projects = (await getCollection('projects')).sort(
         <p class="projects__subtitle">Things I've built and tinkered with.</p>
       </header>
 
-      <div class="projects__grid">
+      <div class="card-grid">
         {
           projects.map((project) => (
             <div class="reveal">
@@ -58,22 +58,10 @@ const projects = (await getCollection('projects')).sort(
     font-size: var(--text-lg);
   }
 
-  .projects__grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--grid-card-min), 1fr));
-    gap: var(--space-lg);
-  }
-
   .projects__empty {
     text-align: center;
     color: var(--color-text-faint);
     padding: var(--space-4xl) 0;
     font-family: var(--font-mono);
-  }
-
-  @media (max-width: 640px) {
-    .projects__grid {
-      grid-template-columns: 1fr;
-    }
   }
 </style>
