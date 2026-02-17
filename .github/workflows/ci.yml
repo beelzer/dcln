@@ -157,35 +157,56 @@ jobs:
             const manifestPath = path.join(resultsPath, 'manifest.json');
             const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 
-            const emoji = (score) => {
-              if (score === null || score === undefined) return '⚪';
-              if (score >= 0.9) return '🟢';
-              if (score >= 0.5) return '🟠';
-              return '🔴';
+            const badge = (score) => {
+              if (score === null || score === undefined) return '`N/A`';
+              const v = Math.round(score * 100);
+              if (v >= 90) return `\`🟢 ${v}\``;
+              if (v >= 50) return `\`🟠 ${v}\``;
+              return `\`🔴 ${v}\``;
             };
 
-            const pct = (score) => {
-              if (score === null || score === undefined) return 'N/A';
-              return Math.round(score * 100);
+            const ms = (value) => {
+              if (value === undefined) return '—';
+              return value >= 1000 ? `${(value / 1000).toFixed(1)}s` : `${Math.round(value)}ms`;
             };
 
-            let rows = '';
+            let scoreRows = '';
+            let vitalsRows = '';
+
             for (const entry of manifest) {
               const url = new URL(entry.url).pathname;
               const s = entry.summary;
               const reportUrl = links[entry.url] || '';
-              rows += `| [${url}](${reportUrl}) | ${emoji(s.performance)} ${pct(s.performance)} | ${emoji(s.accessibility)} ${pct(s.accessibility)} | ${emoji(s['best-practices'])} ${pct(s['best-practices'])} | ${emoji(s.seo)} ${pct(s.seo)} |\n`;
+              const page = `[${url}](${reportUrl})`;
+
+              scoreRows += `| ${page} | ${badge(s.performance)} | ${badge(s.accessibility)} | ${badge(s['best-practices'])} | ${badge(s.seo)} |\n`;
+
+              const lhr = JSON.parse(fs.readFileSync(entry.jsonPath, 'utf8'));
+              const a = lhr.audits;
+              const fcp = ms(a['first-contentful-paint']?.numericValue);
+              const lcp = ms(a['largest-contentful-paint']?.numericValue);
+              const tbt = ms(a['total-blocking-time']?.numericValue);
+              const cls = a['cumulative-layout-shift']?.numericValue?.toFixed(3) ?? '—';
+
+              vitalsRows += `| ${page} | ${fcp} | ${lcp} | ${tbt} | ${cls} |\n`;
             }
 
-            const body = `### ⚡ Lighthouse Report
+            const body = `### Lighthouse Report
 
-            | URL | Performance | Accessibility | Best Practices | SEO |
-            |-----|:-----------:|:-------------:|:--------------:|:---:|
-            ${rows}
+            **Scores**
 
-            🟢 90–100 · 🟠 50–89 · 🔴 0–49 · ⚪ N/A
+            | Page | Performance | Accessibility | Best Practices | SEO |
+            |------|:-----------:|:-------------:|:--------------:|:---:|
+            ${scoreRows}
+            **Core Web Vitals**
+
+            | Page | FCP | LCP | TBT | CLS |
+            |------|:---:|:---:|:---:|:---:|
+            ${vitalsRows}
+            <sub>🟢 90+ · 🟠 50–89 · 🔴 0–49 · Click a page to view the full report</sub>
             `.replace(/^            /gm, '');
 
+            const marker = '### Lighthouse Report';
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -193,7 +214,7 @@ jobs:
             });
 
             const existing = comments.find(c =>
-              c.user.type === 'Bot' && c.body.includes('### ⚡ Lighthouse Report')
+              c.user.type === 'Bot' && c.body.includes(marker)
             );
 
             if (existing) {
