@@ -1,7 +1,7 @@
 name: Bug Report
 description: Report something that isn't working correctly
-labels: ["bug"]
-assignees: ["beelzer"]
+labels: ['bug']
+assignees: ['beelzer']
 body:
   - type: textarea
     id: description
