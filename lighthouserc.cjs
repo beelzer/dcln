@@ -1,13 +1,8 @@
 module.exports = {
   ci: {
     collect: {
-      startServerCommand: 'npx wrangler pages dev dist --port 4321',
-      startServerReadyPattern: 'Ready on',
-      url: [
-        'http://localhost:4321/',
-        'http://localhost:4321/about',
-        'http://localhost:4321/projects',
-      ],
+      staticDistDir: 'dist',
+      url: ['/', '/about', '/projects'],
       numberOfRuns: 1,
     },
     assert: {
