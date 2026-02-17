@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint & Audit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -27,6 +27,7 @@ jobs:
 
       - run: npm ci
       - run: npm run lint
+      - run: npm audit --audit-level=high
 
   typecheck:
     name: Type Check
@@ -42,9 +43,23 @@ jobs:
       - run: npm ci
       - run: npm run check
 
+  unit-test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run test:unit
+
   build:
     name: Build
-    needs: [lint, typecheck]
+    needs: [lint, typecheck, unit-test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -56,3 +71,48 @@ jobs:
 
       - run: npm ci
       - run: npm run build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+          retention-days: 1
+
+  e2e-test:
+    name: E2E Tests
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: dist/
+
+      - run: npx playwright install chromium --with-deps
+      - run: npm run test:e2e
+
+  commitlint:
+    name: Commit Messages
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }}
