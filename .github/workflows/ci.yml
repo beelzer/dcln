@@ -188,15 +188,13 @@ jobs:
               rows += `| ${page} | ${badge(s.performance)} | ${badge(s.accessibility)} | ${badge(s['best-practices'])} | ${badge(s.seo)} | ${fcp} | ${lcp} | ${tbt} | ${cls} |\n`;
             }
 
-            const body = `### Lighthouse Report
+            const body = `## Lighthouse Report
 
             | Page | Performance | Accessibility | Best Practices | SEO | FCP | LCP | TBT | CLS |
             |------|:-----------:|:-------------:|:--------------:|:---:|:---:|:---:|:---:|:---:|
-            ${rows}
-            <sub>🟢 90+ · 🟠 50–89 · 🔴 0–49 · Click a page to view the full report</sub>
-            `.replace(/^            /gm, '');
+            ${rows}`.replace(/^            /gm, '');
 
-            const marker = '### Lighthouse Report';
+            const marker = '## Lighthouse Report';
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,
               repo: context.repo.repo,
