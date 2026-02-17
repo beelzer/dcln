@@ -170,16 +170,13 @@ jobs:
               return value >= 1000 ? `${(value / 1000).toFixed(1)}s` : `${Math.round(value)}ms`;
             };
 
-            let scoreRows = '';
-            let vitalsRows = '';
+            let rows = '';
 
             for (const entry of manifest) {
               const url = new URL(entry.url).pathname;
               const s = entry.summary;
               const reportUrl = links[entry.url] || '';
               const page = `[${url}](${reportUrl})`;
-
-              scoreRows += `| ${page} | ${badge(s.performance)} | ${badge(s.accessibility)} | ${badge(s['best-practices'])} | ${badge(s.seo)} |\n`;
 
               const lhr = JSON.parse(fs.readFileSync(entry.jsonPath, 'utf8'));
               const a = lhr.audits;
@@ -188,21 +185,14 @@ jobs:
               const tbt = ms(a['total-blocking-time']?.numericValue);
               const cls = a['cumulative-layout-shift']?.numericValue?.toFixed(3) ?? '—';
 
-              vitalsRows += `| ${page} | ${fcp} | ${lcp} | ${tbt} | ${cls} |\n`;
+              rows += `| ${page} | ${badge(s.performance)} | ${badge(s.accessibility)} | ${badge(s['best-practices'])} | ${badge(s.seo)} | ${fcp} | ${lcp} | ${tbt} | ${cls} |\n`;
             }
 
             const body = `### Lighthouse Report
 
-            **Scores**
-
-            | Page | Performance | Accessibility | Best Practices | SEO |
-            |------|:-----------:|:-------------:|:--------------:|:---:|
-            ${scoreRows}
-            **Core Web Vitals**
-
-            | Page | FCP | LCP | TBT | CLS |
-            |------|:---:|:---:|:---:|:---:|
-            ${vitalsRows}
+            | Page | Perf | A11y | BP | SEO | FCP | LCP | TBT | CLS |
+            |------|:----:|:----:|:--:|:---:|:---:|:---:|:---:|:---:|
+            ${rows}
             <sub>🟢 90+ · 🟠 50–89 · 🔴 0–49 · Click a page to view the full report</sub>
             `.replace(/^            /gm, '');
 
