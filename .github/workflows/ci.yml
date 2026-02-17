@@ -190,8 +190,8 @@ jobs:
 
             const body = `### Lighthouse Report
 
-            | Page | Perf | A11y | BP | SEO | FCP | LCP | TBT | CLS |
-            |------|:----:|:----:|:--:|:---:|:---:|:---:|:---:|:---:|
+            | Page | Performance | Accessibility | Best Practices | SEO | FCP | LCP | TBT | CLS |
+            |------|:-----------:|:-------------:|:--------------:|:---:|:---:|:---:|:---:|:---:|
             ${rows}
             <sub>🟢 90+ · 🟠 50–89 · 🔴 0–49 · Click a page to view the full report</sub>
             `.replace(/^            /gm, '');
