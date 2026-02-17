@@ -139,10 +139,78 @@ jobs:
           path: dist/
 
       - uses: treosh/lighthouse-ci-action@v12
+        id: lhci
         with:
           configPath: lighthouserc.cjs
           uploadArtifacts: true
           temporaryPublicStorage: true
+
+      - name: Post Lighthouse comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const resultsPath = '${{ steps.lhci.outputs.resultsPath }}';
+            const links = JSON.parse('${{ steps.lhci.outputs.links }}');
+
+            const manifestPath = path.join(resultsPath, 'manifest.json');
+            const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+
+            const emoji = (score) => {
+              if (score === null || score === undefined) return '⚪';
+              if (score >= 0.9) return '🟢';
+              if (score >= 0.5) return '🟠';
+              return '🔴';
+            };
+
+            const pct = (score) => {
+              if (score === null || score === undefined) return 'N/A';
+              return Math.round(score * 100);
+            };
+
+            let rows = '';
+            for (const entry of manifest) {
+              const url = new URL(entry.url).pathname;
+              const s = entry.summary;
+              const reportUrl = links[entry.url] || '';
+              rows += `| [${url}](${reportUrl}) | ${emoji(s.performance)} ${pct(s.performance)} | ${emoji(s.accessibility)} ${pct(s.accessibility)} | ${emoji(s['best-practices'])} ${pct(s['best-practices'])} | ${emoji(s.seo)} ${pct(s.seo)} |\n`;
+            }
+
+            const body = `### ⚡ Lighthouse Report
+
+            | URL | Performance | Accessibility | Best Practices | SEO |
+            |-----|:-----------:|:-------------:|:--------------:|:---:|
+            ${rows}
+
+            🟢 90–100 · 🟠 50–89 · 🔴 0–49 · ⚪ N/A
+            `.replace(/^            /gm, '');
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('### ⚡ Lighthouse Report')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }
 
   commitlint:
     name: Commit Messages
