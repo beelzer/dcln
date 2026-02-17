@@ -28,8 +28,9 @@ if (!email) {
 
         <div class="contact__item">
           <span class="contact__label">GitHub</span>
-          <a href={SITE.github} class="contact__value" target="_blank" rel="noopener">
+          <a href={SITE.github} class="contact__value" target="_blank" rel="noopener noreferrer">
             {SITE.github.replace('https://', '')}
+            <span class="sr-only"> (opens in new window)</span>
           </a>
         </div>
 

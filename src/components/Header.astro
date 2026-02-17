@@ -26,25 +26,23 @@ const links = [
 
     <ul class="header__links">
       {
-        links.map(({ href, label }) => (
-          <li>
-            <a
-              href={href}
-              class:list={[
-                'header__link',
-                {
-                  'header__link--active':
-                    pathname === href || (href !== '/' && pathname.startsWith(href)),
-                },
-              ]}
-            >
-              {label === 'Private' && (
-                <Icon name="lock-closed" size={14} class="header__lock-icon" />
-              )}
-              {label}
-            </a>
-          </li>
-        ))
+        links.map(({ href, label }) => {
+          const active = pathname === href || (href !== '/' && pathname.startsWith(href));
+          return (
+            <li>
+              <a
+                href={href}
+                class:list={['header__link', { 'header__link--active': active }]}
+                aria-current={active ? 'page' : undefined}
+              >
+                {label === 'Private' && (
+                  <Icon name="lock-closed" size={14} class="header__lock-icon" />
+                )}
+                {label}
+              </a>
+            </li>
+          );
+        })
       }
     </ul>
   </nav>

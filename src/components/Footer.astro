@@ -15,16 +15,13 @@ const year = new Date().getFullYear();
       </span>
     </p>
     <div class="footer__links">
-      <a
-        href={SITE.github}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="GitHub (opens in new window)"
-      >
+      <a href={SITE.github} target="_blank" rel="noopener noreferrer">
         <Icon name="github" size={18} />
+        <span class="sr-only">GitHub (opens in new window)</span>
       </a>
-      <a href={`mailto:${SITE.email}`} aria-label="Email">
+      <a href={`mailto:${SITE.email}`}>
         <Icon name="mail" size={18} />
+        <span class="sr-only">Email</span>
       </a>
     </div>
   </div>
