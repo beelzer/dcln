@@ -4,6 +4,7 @@ import BackLink from '../../components/BackLink.astro';
 import Icon from '../../components/Icon.astro';
 import { getCollection, render } from 'astro:content';
 import { SITE } from '../../lib/constants';
+import { fetchReadmeHtml } from '../../lib/github';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -15,6 +16,9 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content } = await render(project);
+
+const readmeHtml =
+  project.data.readme && project.data.repo ? await fetchReadmeHtml(project.data.repo) : null;
 ---
 
 <BaseLayout title={`${project.data.title} — ${SITE.name}`} description={project.data.description}>
@@ -61,7 +65,7 @@ const { Content } = await render(project);
       </header>
 
       <div class="project__content">
-        <Content />
+        {readmeHtml ? <Fragment set:html={readmeHtml} /> : <Content />}
       </div>
     </div>
   </article>
