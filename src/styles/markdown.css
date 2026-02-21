@@ -520,3 +520,26 @@
     margin-top: var(--space-md);
   }
 }
+
+/* ============================================
+   Un-layered overrides
+   These MUST live outside @layer to beat the
+   global reset's `img,svg { display: block }`.
+   ============================================ */
+
+/* Hide the README's h1 — the page already shows the project title */
+.project__content > .markdown-body > .markdown-heading:first-child,
+.project__content > #readme > .markdown-body > .markdown-heading:first-child {
+  display: none;
+}
+
+/* Badge images must flow inline, not stack as blocks */
+.project__content p a img,
+.project__content p > img {
+  display: inline-block;
+}
+
+/* Heading anchor SVGs should not break inline flow */
+.project__content .anchor svg {
+  display: inline;
+}
