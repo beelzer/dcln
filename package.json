@@ -29,6 +29,11 @@
       "prettier --write"
     ]
   },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.12",
     "@astrojs/sitemap": "^3.7.0",
