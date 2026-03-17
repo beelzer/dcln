@@ -1,18 +1,18 @@
 # dcln.me
 
 ![CI](https://github.com/beelzer/dcln/actions/workflows/ci.yml/badge.svg)
-![Astro](https://img.shields.io/badge/Astro-5-bc52ee?logo=astro&logoColor=white)
-![Cloudflare Pages](https://img.shields.io/badge/Cloudflare%20Pages-deployed-f38020?logo=cloudflare&logoColor=white)
+![Astro](https://img.shields.io/badge/Astro-6-bc52ee?logo=astro&logoColor=white)
+![Cloudflare Workers](https://img.shields.io/badge/Cloudflare%20Workers-deployed-f38020?logo=cloudflare&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow)
 
-Personal portfolio site built with Astro 5 and deployed on Cloudflare Pages.
+Personal portfolio site built with Astro 6 and deployed on Cloudflare Workers.
 
 ## Stack
 
-- **Framework**: Astro 5 (hybrid rendering)
+- **Framework**: Astro 6 (hybrid rendering)
 - **Styling**: Vanilla CSS with modern features (nesting, `@layer`, `color-mix()`, scroll-driven animations)
-- **Hosting**: Cloudflare Pages
+- **Hosting**: Cloudflare Workers
 - **Auth**: Cloudflare Access (Google OAuth) for private content
 
 ## Development
@@ -53,4 +53,4 @@ See [CONTRIBUTING.md](.github/CONTRIBUTING.md) for commit conventions and workfl
 
 ## Deployment
 
-Pushes to `main` trigger automatic builds on Cloudflare Pages. CI runs lint, type check, unit tests, build, and E2E tests via GitHub Actions.
+Pushes to `main` trigger automatic builds on Cloudflare Workers. CI runs lint, type check, unit tests, build, and E2E tests via GitHub Actions.
