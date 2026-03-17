@@ -1,15 +1,9 @@
 export const prerender = false;
 
 import type { APIRoute } from 'astro';
-import { verifyAccessJWT } from '../../../lib/auth';
 
-export const GET: APIRoute = async ({ request }) => {
-  const isAuthenticated = await verifyAccessJWT(request);
-
-  if (!isAuthenticated) {
-    return new Response('Unauthorized', { status: 401 });
-  }
-
+export const GET: APIRoute = async () => {
+  // Auth is handled by middleware for all /private/* routes.
   // In production, the resume would be stored in a Cloudflare R2 bucket
   // or served from a non-public location. For now, return a placeholder
   // response indicating where to place the file.

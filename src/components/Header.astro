@@ -18,7 +18,13 @@ const links = [
     </a>
 
     <input type="checkbox" id="nav-toggle" class="header__toggle-input sr-only" />
-    <label for="nav-toggle" class="header__toggle" aria-label="Toggle navigation">
+    <label
+      for="nav-toggle"
+      class="header__toggle"
+      aria-label="Toggle navigation"
+      aria-expanded="false"
+      role="button"
+    >
       <span class="header__toggle-bar"></span>
       <span class="header__toggle-bar"></span>
       <span class="header__toggle-bar"></span>
@@ -49,12 +55,19 @@ const links = [
 </header>
 
 <script>
+  const toggle = document.getElementById('nav-toggle') as HTMLInputElement | null;
+  const label = document.querySelector('.header__toggle') as HTMLElement | null;
+
+  function syncAriaExpanded() {
+    label?.setAttribute('aria-expanded', String(toggle?.checked ?? false));
+  }
+
+  toggle?.addEventListener('change', syncAriaExpanded);
+
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      const toggle = document.getElementById('nav-toggle') as HTMLInputElement | null;
-      if (toggle?.checked) {
-        toggle.checked = false;
-      }
+    if (e.key === 'Escape' && toggle?.checked) {
+      toggle.checked = false;
+      syncAriaExpanded();
     }
   });
 </script>

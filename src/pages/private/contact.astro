@@ -3,14 +3,7 @@ export const prerender = false;
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BackLink from '../../components/BackLink.astro';
-import { getAccessEmail } from '../../lib/auth';
 import { SITE } from '../../lib/constants';
-
-const email = await getAccessEmail(Astro.request);
-
-if (!email) {
-  return Astro.redirect('/private');
-}
 ---
 
 <BaseLayout title={`Contact — ${SITE.name}`} description="Private contact information">
