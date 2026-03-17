@@ -6,7 +6,7 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/). 
 
 Format:
 
-```
+```text
 <type>: <short summary>
 ```
 
@@ -41,6 +41,8 @@ npm run dev
 ## Testing
 
 ```sh
+npm run lint         # ESLint + Prettier check
+npm run check        # Astro type checking
 npm run test:unit    # Vitest unit tests
 npm run test:e2e     # Playwright E2E tests (requires a build first)
 npm run build        # Build before running E2E

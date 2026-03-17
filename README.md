@@ -24,15 +24,16 @@ npm run dev
 
 ## Commands
 
-| Command             | Description              |
-| ------------------- | ------------------------ |
-| `npm run dev`       | Start dev server         |
-| `npm run build`     | Production build         |
-| `npm run check`     | TypeScript type checking |
-| `npm run lint`      | ESLint + Prettier check  |
-| `npm run lint:fix`  | Auto-fix lint issues     |
-| `npm run test:unit` | Run Vitest unit tests    |
-| `npm run test:e2e`  | Run Playwright E2E tests |
+| Command              | Description              |
+| -------------------- | ------------------------ |
+| `npm run dev`        | Start dev server         |
+| `npm run build`      | Production build         |
+| `npm run check`      | TypeScript type checking |
+| `npm run lint`       | ESLint + Prettier check  |
+| `npm run lint:fix`   | Auto-fix lint issues     |
+| `npm run test:unit`  | Run Vitest unit tests    |
+| `npm run test:watch` | Run Vitest in watch mode |
+| `npm run test:e2e`   | Run Playwright E2E tests |
 
 ## Project Structure
 
@@ -41,7 +42,8 @@ src/
   components/    UI components (Astro)
   content/       Markdown content collections
   layouts/       Base page layout
-  lib/           Constants, auth utilities
+  lib/           Constants, auth, GitHub API, syntax highlighting
+  middleware.ts  Auth guard for /private/* routes
   pages/         Routes (public + private SSR)
   styles/        Global CSS and design tokens
 public/          Static assets, security headers
