@@ -4,7 +4,7 @@
 
 If you discover a security vulnerability, please report it responsibly via email:
 
-**gh@dcln.me**
+**<gh@dcln.me>**
 
 Do not open a public issue for security vulnerabilities.
 
@@ -12,7 +12,7 @@ You can expect an initial response within 72 hours.
 
 ## Scope
 
-This site (dcln.me) is a personal portfolio deployed on Cloudflare Pages.
+This site (dcln.me) is a personal portfolio deployed on Cloudflare Workers.
 
 ### In scope
 
@@ -33,7 +33,7 @@ This site (dcln.me) is a personal portfolio deployed on Cloudflare Pages.
 
 ## Security Architecture
 
-- **Hosting**: Cloudflare Pages (static + SSR via Cloudflare Workers)
+- **Hosting**: Cloudflare Workers (static + SSR)
 - **Authentication**: Cloudflare Access JWT verification for private routes
 - **Security headers**: CSP, HSTS, X-Frame-Options, and others enforced via `public/_headers`
 - **Dependencies**: Monitored weekly via Dependabot

@@ -4,7 +4,7 @@
 
 Use [Conventional Commits](https://www.conventionalcommits.org/) format:
 
-```
+```text
 <type>: <short summary>
 ```
 
@@ -32,7 +32,7 @@ Examples:
 
 ## Project
 
-- Astro 5 portfolio site deployed on Cloudflare Pages
+- Astro 6 portfolio site deployed on Cloudflare Workers
 - Vanilla CSS only (no preprocessors, no CSS-in-JS)
 - Minimize JavaScript — prefer Astro's zero-JS-by-default approach
 - All site-wide constants live in `src/lib/constants.ts`
@@ -43,13 +43,18 @@ Examples:
 - `npm run dev` — local dev server
 - `npm run build` — production build
 - `npm run lint` — eslint + prettier check
+- `npm run lint:fix` — auto-fix lint issues
 - `npm run check` — astro type checking
+- `npm run test:unit` — vitest unit tests
+- `npm run test:e2e` — playwright e2e tests (requires build first)
 
 ## Architecture
 
 - Pages in `src/pages/` — public pages are prerendered, `private/*` are SSR
 - Project content uses Astro Content Collections in `src/content/projects/`
 - Auth handled by Cloudflare Access (JWT verification in `src/lib/auth.ts`)
+- `src/middleware.ts` protects all `/private/*` sub-routes (auth guard)
+- OG images generated at build time via satori in `src/pages/og/[...route].png.ts`
 - `public/_headers` controls Cloudflare security headers
 
 ## Versioning (AUTOMATIC — do this on every commit and push)
