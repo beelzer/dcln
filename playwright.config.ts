@@ -21,7 +21,8 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: 'npx wrangler pages dev dist --port 4321',
+    command:
+      'npx wrangler dev dist/server/entry.mjs --port 4321 --config dist/server/wrangler.json',
     url: 'http://localhost:4321',
     reuseExistingServer: !process.env.CI,
     timeout: 30000,

@@ -10,7 +10,7 @@ const { version } = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 export default defineConfig({
   site: 'https://dcln.me',
-  adapter: cloudflare(),
+  adapter: cloudflare({ prerenderEnvironment: 'node' }),
   integrations: [sitemap()],
   vite: {
     define: {
