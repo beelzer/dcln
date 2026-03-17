@@ -101,9 +101,17 @@ export async function verifyJWT(token: string): Promise<JWTPayload | null> {
     // Decode header to get key ID
     const header: JWTHeader = JSON.parse(new TextDecoder().decode(base64urlDecode(headerB64)));
 
-    // Fetch public keys and find matching key
-    const keys = await getPublicKeys();
-    const key = keys.get(header.kid);
+    // Fetch public keys and find matching key.
+    // If the key ID isn't found, invalidate cache and retry once
+    // in case Cloudflare rotated keys while we had stale cached keys.
+    let keys = await getPublicKeys();
+    let key = keys.get(header.kid);
+    if (!key && cachedKeys) {
+      cachedKeys = null;
+      cacheExpiry = 0;
+      keys = await getPublicKeys();
+      key = keys.get(header.kid);
+    }
     if (!key) return null;
 
     // Verify signature
