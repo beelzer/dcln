@@ -20,7 +20,7 @@ jobs:
         with:
           script: |
             const branch = context.payload.pull_request.head.ref;
-            const projectName = 'dcln';
+            const workerName = 'dcln';
             const accountId = process.env.CF_ACCOUNT_ID;
             const apiToken = process.env.CF_API_TOKEN;
 
@@ -29,8 +29,9 @@ jobs:
               return;
             }
 
-            const listUrl = `https://api.cloudflare.com/client/v4/accounts/${accountId}/pages/projects/${projectName}/deployments`;
-            const response = await fetch(listUrl, {
+            // Workers Versions API — list deployments for the worker
+            const baseUrl = `https://api.cloudflare.com/client/v4/accounts/${accountId}/workers/scripts/${workerName}/deployments`;
+            const response = await fetch(baseUrl, {
               headers: { Authorization: `Bearer ${apiToken}` },
             });
             const data = await response.json();
@@ -40,25 +41,8 @@ jobs:
               return;
             }
 
-            const branchDeployments = data.result.filter(
-              (d) => d.deployment_trigger?.metadata?.branch === branch,
-            );
-
-            if (branchDeployments.length === 0) {
-              core.info(`No deployments found for branch: ${branch}`);
-              return;
-            }
-
-            for (const deployment of branchDeployments) {
-              const deleteUrl = `${listUrl}/${deployment.id}?force=true`;
-              const delResponse = await fetch(deleteUrl, {
-                method: 'DELETE',
-                headers: { Authorization: `Bearer ${apiToken}` },
-              });
-              const delData = await delResponse.json();
-              if (delData.success) {
-                core.info(`Deleted deployment ${deployment.id} (${deployment.url})`);
-              } else {
-                core.warning(`Failed to delete ${deployment.id}: ${JSON.stringify(delData.errors)}`);
-              }
-            }
+            // Workers deployments don't have per-branch previews like Pages.
+            // Cloudflare Pages preview cleanup is no longer needed after the
+            // migration to Workers. This workflow is kept as a no-op placeholder
+            // in case branch-based preview deployments are added in the future.
+            core.info(`Preview cleanup skipped — Workers does not create per-branch previews (branch: ${branch})`);
