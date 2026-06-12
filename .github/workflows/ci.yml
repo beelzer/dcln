@@ -71,6 +71,10 @@ jobs:
 
       - run: npm ci
       - run: npm run build
+        env:
+          # Authenticated GitHub API requests for build-time README
+          # fetches — unauthenticated runners share a 60/hour rate limit
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/upload-artifact@v7
         with:
