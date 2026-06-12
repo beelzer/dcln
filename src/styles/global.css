@@ -185,6 +185,14 @@
     }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   /* Tag / pill */
   .tag {
     display: inline-block;

@@ -101,12 +101,18 @@ export async function verifyJWT(token: string): Promise<JWTPayload | null> {
     // Decode header to get key ID
     const header: JWTHeader = JSON.parse(new TextDecoder().decode(base64urlDecode(headerB64)));
 
+    // Cloudflare Access only signs with RS256; reject anything else
+    if (header.alg !== 'RS256') return null;
+
     // Fetch public keys and find matching key.
-    // If the key ID isn't found, invalidate cache and retry once
-    // in case Cloudflare rotated keys while we had stale cached keys.
+    // If the key ID isn't found in keys served from cache, invalidate
+    // and retry once in case Cloudflare rotated keys while we had stale
+    // cached keys. Freshly fetched keys are not retried — a second fetch
+    // would return the same set.
+    const servedFromCache = cachedKeys !== null && Date.now() < cacheExpiry;
     let keys = await getPublicKeys();
     let key = keys.get(header.kid);
-    if (!key && cachedKeys) {
+    if (!key && servedFromCache) {
       cachedKeys = null;
       cacheExpiry = 0;
       keys = await getPublicKeys();
@@ -136,6 +142,14 @@ export async function verifyJWT(token: string): Promise<JWTPayload | null> {
 
     // Check not-before
     if (payload.nbf && payload.nbf > now + JWT_NBF_TOLERANCE_S) return null;
+
+    // Check issuer — the token must come from our Access team domain,
+    // not just any Cloudflare Access deployment
+    if (payload.iss !== SITE.cfAccessTeamDomain) return null;
+
+    // Check audience — the token must be issued for this Access
+    // application, not another app under the same team domain
+    if (SITE.cfAccessAud && !payload.aud?.includes(SITE.cfAccessAud)) return null;
 
     return payload;
   } catch {

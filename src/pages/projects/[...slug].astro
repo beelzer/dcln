@@ -20,6 +20,15 @@ const { Content } = await render(project);
 
 const readmeHtml =
   project.data.readme && project.data.repo ? await fetchReadmeHtml(project.data.repo) : null;
+
+// A failed README fetch falls back to <Content />; if the entry has no
+// body either, the page would silently ship empty — fail the build instead.
+if (project.data.readme && !readmeHtml && !project.body?.trim()) {
+  throw new Error(
+    `README fetch failed for "${project.id}" and the entry has no fallback body. ` +
+      'Set GITHUB_TOKEN to avoid API rate limits, or add body content to the markdown file.',
+  );
+}
 ---
 
 <BaseLayout title={`${project.data.title} — ${SITE.name}`} description={project.data.description}>
