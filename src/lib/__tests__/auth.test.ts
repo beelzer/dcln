@@ -1,4 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { SITE } from '../constants';
 
 // Helper to create a mock Request with optional JWT header
 function mockRequest(jwt?: string): Request {
@@ -17,6 +18,28 @@ function base64urlEncode(data: string): string {
     binary += String.fromCharCode(byte);
   }
   return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+// Helper to generate an RSA key pair and mock the JWKS endpoint with its public key
+async function generateKeyPairWithJWKS(kid: string): Promise<CryptoKeyPair> {
+  const keyPair = await crypto.subtle.generateKey(
+    {
+      name: 'RSASSA-PKCS1-v1_5',
+      modulusLength: 2048,
+      publicExponent: new Uint8Array([1, 0, 1]),
+      hash: 'SHA-256',
+    },
+    true,
+    ['sign', 'verify'],
+  );
+
+  const publicJwk = await crypto.subtle.exportKey('jwk', keyPair.publicKey);
+
+  vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+    new Response(JSON.stringify({ keys: [{ ...publicJwk, kid }] }), { status: 200 }),
+  );
+
+  return keyPair;
 }
 
 // Helper to create a properly signed JWT for integration tests
@@ -54,6 +77,12 @@ describe('auth', () => {
     verifyAccessJWT = mod.verifyAccessJWT;
     getAccessEmail = mod.getAccessEmail;
     getAccessSession = mod.getAccessSession;
+  });
+
+  afterEach(() => {
+    // Unmock here rather than inside tests — a failed assertion would
+    // skip in-test cleanup and leak the mock into later tests
+    vi.doUnmock('../constants');
   });
 
   describe('verifyJWT', () => {
@@ -106,7 +135,7 @@ describe('auth', () => {
           iat: now,
           nbf: now,
           sub: '1',
-          iss: 'test',
+          iss: SITE.cfAccessTeamDomain,
           aud: ['test'],
         },
         keyPair,
@@ -146,7 +175,7 @@ describe('auth', () => {
           iat: now - 200,
           nbf: now - 200,
           sub: '1',
-          iss: 'test',
+          iss: SITE.cfAccessTeamDomain,
           aud: ['test'],
         },
         keyPair,
@@ -154,6 +183,93 @@ describe('auth', () => {
       );
 
       expect(await verifyJWT(token)).toBeNull();
+    });
+
+    it('returns null for tokens from a different issuer', async () => {
+      const kid = 'test-key-iss';
+      const keyPair = await generateKeyPairWithJWKS(kid);
+
+      const now = Math.floor(Date.now() / 1000);
+      const token = await createSignedJWT(
+        {
+          email: 'user@dcln.me',
+          exp: now + 3600,
+          iat: now,
+          nbf: now,
+          sub: '1',
+          iss: 'https://attacker.cloudflareaccess.com',
+          aud: ['test'],
+        },
+        keyPair,
+        kid,
+      );
+
+      expect(await verifyJWT(token)).toBeNull();
+    });
+
+    it('returns null for tokens signed with an unexpected algorithm', async () => {
+      const kid = 'test-key-alg';
+      const keyPair = await generateKeyPairWithJWKS(kid);
+
+      const now = Math.floor(Date.now() / 1000);
+      // Properly RSA-signed, but the header claims a different algorithm
+      const header = base64urlEncode(JSON.stringify({ alg: 'HS256', kid }));
+      const body = base64urlEncode(
+        JSON.stringify({
+          email: 'user@dcln.me',
+          exp: now + 3600,
+          iat: now,
+          nbf: now,
+          sub: '1',
+          iss: SITE.cfAccessTeamDomain,
+          aud: ['test'],
+        }),
+      );
+      const signedData = new TextEncoder().encode(`${header}.${body}`);
+      const signature = await crypto.subtle.sign(
+        'RSASSA-PKCS1-v1_5',
+        keyPair.privateKey,
+        signedData,
+      );
+      const sigB64 = btoa(String.fromCharCode(...new Uint8Array(signature)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+
+      expect(await verifyJWT(`${header}.${body}.${sigB64}`)).toBeNull();
+    });
+
+    it('enforces the audience claim when an AUD tag is configured', async () => {
+      vi.doMock('../constants', async (importOriginal) => {
+        const actual = await importOriginal<typeof import('../constants')>();
+        return { ...actual, SITE: { ...actual.SITE, cfAccessAud: 'expected-aud-tag' } };
+      });
+      // Re-import so the auth module picks up the mocked constants
+      vi.resetModules();
+      const { verifyJWT: verifyWithAud } = await import('../auth');
+
+      const kid = 'test-key-aud';
+      const keyPair = await generateKeyPairWithJWKS(kid);
+
+      const now = Math.floor(Date.now() / 1000);
+      const claims = {
+        email: 'user@dcln.me',
+        exp: now + 3600,
+        iat: now,
+        nbf: now,
+        sub: '1',
+        iss: SITE.cfAccessTeamDomain,
+      };
+
+      const wrongAud = await createSignedJWT({ ...claims, aud: ['another-app'] }, keyPair, kid);
+      expect(await verifyWithAud(wrongAud)).toBeNull();
+
+      const rightAud = await createSignedJWT(
+        { ...claims, aud: ['expected-aud-tag'] },
+        keyPair,
+        kid,
+      );
+      expect(await verifyWithAud(rightAud)).not.toBeNull();
     });
   });
 
@@ -211,7 +327,7 @@ describe('auth', () => {
           iat: now,
           nbf: now,
           sub: '1',
-          iss: 'test',
+          iss: SITE.cfAccessTeamDomain,
           aud: ['test'],
         },
         keyPair,

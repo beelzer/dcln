@@ -9,6 +9,12 @@ export const SITE = {
   email: 'contact@dcln.me',
   github: 'https://github.com/beelzer',
   cfAccessTeamDomain: 'https://dcln-me.cloudflareaccess.com',
+  /**
+   * Application Audience (AUD) tag from Cloudflare Zero Trust →
+   * Access → Applications → <app> → Overview. When set, JWTs must
+   * carry this audience; when empty, the check is skipped.
+   */
+  cfAccessAud: '',
   featuredProjectsLimit: 3,
   version: __VERSION__,
   commitHash: __COMMIT_HASH__,
