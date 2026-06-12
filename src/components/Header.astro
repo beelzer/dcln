@@ -55,16 +55,27 @@ const links = [
 </header>
 
 <script>
-  const toggle = document.getElementById('nav-toggle') as HTMLInputElement | null;
-  const label = document.querySelector('.header__toggle') as HTMLElement | null;
-
-  function syncAriaExpanded() {
-    label?.setAttribute('aria-expanded', String(toggle?.checked ?? false));
+  // This script runs once per full page load, but view transitions swap
+  // the DOM underneath it — so handlers delegate from `document` and
+  // query the current elements on every event instead of capturing them.
+  function getToggle() {
+    return document.getElementById('nav-toggle') as HTMLInputElement | null;
   }
 
-  toggle?.addEventListener('change', syncAriaExpanded);
+  function syncAriaExpanded() {
+    document
+      .querySelector('.header__toggle')
+      ?.setAttribute('aria-expanded', String(getToggle()?.checked ?? false));
+  }
+
+  document.addEventListener('change', (e) => {
+    if ((e.target as HTMLElement | null)?.id === 'nav-toggle') {
+      syncAriaExpanded();
+    }
+  });
 
   document.addEventListener('keydown', (e) => {
+    const toggle = getToggle();
     if (e.key === 'Escape' && toggle?.checked) {
       toggle.checked = false;
       syncAriaExpanded();
