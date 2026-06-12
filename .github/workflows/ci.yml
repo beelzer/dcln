@@ -151,6 +151,10 @@ jobs:
 
       - name: Post Lighthouse comment
         uses: actions/github-script@v9
+        env:
+          # Passed via env rather than interpolated into the script so
+          # quotes in the JSON can't break out of a string literal
+          LHCI_LINKS: ${{ steps.lhci.outputs.links }}
         with:
           script: |
             const fs = require('fs');
@@ -169,7 +173,7 @@ jobs:
             };
 
             const manifest = JSON.parse(fs.readFileSync('.lighthouseci/manifest.json', 'utf8'));
-            const links = JSON.parse('${{ steps.lhci.outputs.links }}');
+            const links = JSON.parse(process.env.LHCI_LINKS || '{}');
 
             let rows = '';
             for (const entry of manifest) {
