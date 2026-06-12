@@ -21,7 +21,11 @@ const { title = SITE.title, description = SITE.description } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const ogRoute = Astro.url.pathname === '/' ? 'index' : Astro.url.pathname.replace(/^\/|\/$/g, '');
+// OG images are only generated for the home, about, and projects pages
+// (see src/pages/og/[...route].png.ts) — everything else (private area,
+// error pages) falls back to the site-wide image.
+const hasOwnOgImage = /^\/(about|projects(\/.+)?)\/?$/.test(Astro.url.pathname);
+const ogRoute = hasOwnOgImage ? Astro.url.pathname.replace(/^\/|\/$/g, '') : 'index';
 const ogImage = new URL(`/og/${ogRoute}.png`, Astro.site).href;
 ---
 
