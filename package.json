@@ -35,7 +35,7 @@
     ]
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^13.7.0",
+    "@astrojs/cloudflare": "^14.0.1",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
