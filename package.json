@@ -41,7 +41,7 @@
     "@fontsource/jetbrains-mono": "^5.3.0",
     "@resvg/resvg-wasm": "^2.6.2",
     "astro": "^6.4.7",
-    "satori": "^0.28.1",
+    "satori": "^0.29.0",
     "satori-html": "^0.3.2",
     "undici": "^7.24.4"
   },
@@ -52,18 +52,18 @@
     }
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.9",
+    "@astrojs/check": "^0.9.10",
     "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.0.2",
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "^1.62.0",
     "@types/node": "^25.9.3",
     "@typescript-eslint/eslint-plugin": "^8.65.0",
     "@typescript-eslint/parser": "^8.55.0",
-    "eslint": "^10.7.0",
+    "eslint": "^10.8.0",
     "eslint-plugin-astro": "^1.7.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.1.0",
-    "prettier": "^3.9.5",
+    "lint-staged": "^17.2.0",
+    "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.2",
     "vitest": "^4.1.10"
