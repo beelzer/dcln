@@ -7,63 +7,78 @@ const year = new Date().getFullYear();
 
 <footer class="footer">
   <div class="footer__inner container">
-    <p class="footer__copy">
-      &copy; {year}
-      {SITE.author}
-      <span class="footer__version" title={`${SITE.version} (${SITE.commitHash})`}>
-        v{SITE.version}
-      </span>
+    <p class="footer__copy">&copy; {year} {SITE.author}</p>
+    <p class="footer__colophon" title="Build version and commit">
+      v{SITE.version}{' '}
+      <span class="footer__hash">{SITE.commitHash}</span>
     </p>
-    <div class="footer__links">
-      <a href={SITE.github} target="_blank" rel="noopener noreferrer">
-        <Icon name="github" size={18} />
-        <span class="sr-only">GitHub (opens in new window)</span>
-      </a>
-      <a href={`mailto:${SITE.email}`}>
-        <Icon name="mail" size={18} />
-        <span class="sr-only">Email</span>
-      </a>
-    </div>
+    <ul class="footer__links">
+      <li>
+        <a href={SITE.github} target="_blank" rel="noopener noreferrer">
+          <Icon name="github" size={18} />
+          <span class="sr-only">GitHub (opens in new window)</span>
+        </a>
+      </li>
+      <li>
+        <a href={`mailto:${SITE.email}`}>
+          <Icon name="mail" size={18} />
+          <span class="sr-only">Email</span>
+        </a>
+      </li>
+    </ul>
   </div>
 </footer>
 
 <style>
   .footer {
-    border-top: 1px solid var(--color-border);
-    padding: var(--space-xl) 0;
     margin-top: var(--space-4xl);
+    padding: var(--space-xl) 0 var(--space-2xl);
+    border-top: 1px solid var(--color-border);
   }
 
   .footer__inner {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
-  }
-
-  .footer__copy {
+    gap: var(--space-md);
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     color: var(--color-text-faint);
   }
 
-  .footer__version {
-    color: var(--color-text-faint);
-    opacity: 0.5;
-    margin-left: var(--space-sm);
+  .footer__colophon {
     cursor: help;
+  }
+
+  .footer__hash {
+    opacity: 0.6;
   }
 
   .footer__links {
     display: flex;
+    justify-content: flex-end;
     gap: var(--space-md);
+    list-style: none;
+
+    a {
+      color: var(--color-text-faint);
+      text-decoration: none;
+      transition: color var(--duration-fast) var(--ease-out);
+
+      &:hover {
+        color: var(--color-accent);
+      }
+    }
   }
 
-  .footer__links a {
-    color: var(--color-text-faint);
-    transition: color var(--duration-fast) var(--ease-out);
+  @media (max-width: 640px) {
+    .footer__inner {
+      grid-template-columns: 1fr auto;
+    }
 
-    &:hover {
-      color: var(--color-text);
+    .footer__colophon {
+      grid-column: 1 / -1;
+      order: 1;
     }
   }
 </style>

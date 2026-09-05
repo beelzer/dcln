@@ -6,6 +6,7 @@ export const SITE = {
   title: 'dcln.me — Declan',
   description: 'Portfolio & projects by Declan',
   author: 'Declan',
+  tagline: 'I build things for the web.',
   email: 'contact@dcln.me',
   github: 'https://github.com/beelzer',
   cfAccessTeamDomain: 'https://dcln-me.cloudflareaccess.com',
@@ -18,6 +19,18 @@ export const SITE = {
   featuredProjectsLimit: 3,
   version: __VERSION__,
   commitHash: __COMMIT_HASH__,
+} as const;
+
+/**
+ * Brand colours for surfaces CSS can't reach (theme-color meta, OG images).
+ * Keep in sync with the design tokens in `src/styles/global.css`.
+ */
+export const THEME = {
+  bg: '#0d0b08',
+  bgElevated: '#1e1a16',
+  text: '#ece7df',
+  textMuted: '#9e978e',
+  accent: '#f5ae39',
 } as const;
 
 /**

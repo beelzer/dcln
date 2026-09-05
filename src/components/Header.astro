@@ -42,7 +42,7 @@ const links = [
                 aria-current={active ? 'page' : undefined}
               >
                 {label === 'Private' && (
-                  <Icon name="lock-closed" size={14} class="header__lock-icon" />
+                  <Icon name="lock-closed" size={13} class="header__lock-icon" />
                 )}
                 {label}
               </a>
@@ -88,8 +88,8 @@ const links = [
     position: sticky;
     top: 0;
     z-index: var(--z-header);
-    background: color-mix(in oklch, var(--color-bg) 85%, transparent);
-    backdrop-filter: blur(12px);
+    background: color-mix(in oklch, var(--color-bg) 82%, transparent);
+    backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--color-border);
   }
 
@@ -105,7 +105,8 @@ const links = [
     font-size: var(--text-lg);
     font-weight: 700;
     color: var(--color-text);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
+    text-decoration: none;
 
     &:hover {
       color: var(--color-text);
@@ -118,7 +119,7 @@ const links = [
 
   .header__links {
     display: flex;
-    gap: var(--space-lg);
+    gap: var(--space-xl);
     list-style: none;
   }
 
@@ -131,12 +132,13 @@ const links = [
     gap: var(--space-xs);
     padding: var(--space-xs) 0;
     position: relative;
+    text-decoration: none;
     transition: color var(--duration-fast) var(--ease-out);
 
     &::after {
       content: '';
       position: absolute;
-      bottom: -2px;
+      bottom: -1px;
       left: 0;
       width: 0;
       height: 1px;
@@ -154,16 +156,20 @@ const links = [
   }
 
   .header__link--active {
-    color: var(--color-text);
+    color: var(--color-accent);
 
     &::after {
       width: 100%;
     }
+
+    &:hover {
+      color: var(--color-accent);
+    }
   }
 
   .header__lock-icon {
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
     flex-shrink: 0;
   }
 
@@ -209,7 +215,7 @@ const links = [
     }
 
     .header__link {
-      font-size: var(--text-lg);
+      font-size: var(--text-xl);
     }
 
     .header__toggle-input:checked ~ .header__links {

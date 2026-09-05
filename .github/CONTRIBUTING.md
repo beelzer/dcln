@@ -33,6 +33,8 @@ Examples:
 
 ## Development
 
+Requires Node 24 and npm 11 (see `.node-version`).
+
 ```sh
 npm install
 npm run dev

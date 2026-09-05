@@ -3,14 +3,13 @@ import { getCollection } from 'astro:content';
 import satori from 'satori';
 import { Resvg, initWasm } from '@resvg/resvg-wasm';
 import { readFileSync } from 'node:fs';
-import { SITE } from '../../lib/constants';
+import { SITE, THEME } from '../../lib/constants';
 
-const interRegular = readFileSync(
-  'node_modules/@fontsource/inter/files/inter-latin-400-normal.woff',
-);
-const interSemiBold = readFileSync(
-  'node_modules/@fontsource/inter/files/inter-latin-600-normal.woff',
-);
+// satori reads WOFF (not WOFF2), which the static fontsource package ships.
+const fontDir = 'node_modules/@fontsource/fraunces/files';
+const fraunces = readFileSync(`${fontDir}/fraunces-latin-400-normal.woff`);
+const frauncesItalic = readFileSync(`${fontDir}/fraunces-latin-400-italic.woff`);
+const frauncesSemiBold = readFileSync(`${fontDir}/fraunces-latin-600-normal.woff`);
 
 await initWasm(readFileSync('node_modules/@resvg/resvg-wasm/index_bg.wasm'));
 
@@ -51,22 +50,40 @@ export const GET: APIRoute = async ({ params }) => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'flex-end',
+          position: 'relative',
+          overflow: 'hidden',
           width: 1200,
           height: 630,
-          background: '#0a0a0a',
-          padding: 60,
-          borderLeft: '6px solid #3b82f6',
+          padding: 64,
+          background: THEME.bg,
+          fontFamily: 'Fraunces',
         },
         children: [
           {
             type: 'div',
             props: {
               style: {
-                fontSize: 56,
+                position: 'absolute',
+                right: -10,
+                bottom: -150,
+                fontSize: 560,
+                fontStyle: 'italic',
+                lineHeight: 1,
+                color: THEME.bgElevated,
+              },
+              children: 'd.',
+            },
+          },
+          {
+            type: 'div',
+            props: {
+              style: {
+                fontSize: 64,
                 fontWeight: 600,
-                color: '#e8e8e8',
-                lineHeight: 1.2,
-                marginBottom: 16,
+                color: THEME.text,
+                lineHeight: 1.05,
+                letterSpacing: -1,
+                maxWidth: 960,
               },
               children: page.title,
             },
@@ -74,21 +91,33 @@ export const GET: APIRoute = async ({ params }) => {
           {
             type: 'div',
             props: {
-              style: { fontSize: 26, color: '#8c8c8c', lineHeight: 1.4 },
+              style: {
+                fontSize: 26,
+                color: THEME.textMuted,
+                lineHeight: 1.4,
+                marginTop: 18,
+                maxWidth: 900,
+              },
               children: page.description,
             },
           },
           {
             type: 'div',
             props: {
-              style: {
-                fontSize: 18,
-                color: '#3b82f6',
-                fontWeight: 600,
-                marginTop: 'auto',
-                paddingTop: 40,
-              },
-              children: 'dcln.me',
+              style: { display: 'flex', alignItems: 'center', gap: 14, marginTop: 48 },
+              children: [
+                {
+                  type: 'div',
+                  props: { style: { width: 28, height: 2, background: THEME.accent } },
+                },
+                {
+                  type: 'div',
+                  props: {
+                    style: { fontSize: 22, fontStyle: 'italic', color: THEME.accent },
+                    children: SITE.name,
+                  },
+                },
+              ],
             },
           },
         ],
@@ -98,8 +127,9 @@ export const GET: APIRoute = async ({ params }) => {
       width: 1200,
       height: 630,
       fonts: [
-        { name: 'Inter', data: interRegular, weight: 400, style: 'normal' as const },
-        { name: 'Inter', data: interSemiBold, weight: 600, style: 'normal' as const },
+        { name: 'Fraunces', data: fraunces, weight: 400, style: 'normal' as const },
+        { name: 'Fraunces', data: frauncesItalic, weight: 400, style: 'italic' as const },
+        { name: 'Fraunces', data: frauncesSemiBold, weight: 600, style: 'normal' as const },
       ],
     },
   );

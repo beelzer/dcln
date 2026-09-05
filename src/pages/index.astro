@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import ProjectCard from '../components/ProjectCard.astro';
+import ProjectRow from '../components/ProjectRow.astro';
 import Icon from '../components/Icon.astro';
 import { getCollection } from 'astro:content';
 import { SITE } from '../lib/constants';
@@ -17,22 +17,24 @@ const featuredProjects = (await getCollection('projects'))
 
   {
     featuredProjects.length > 0 && (
-      <section class="featured reveal">
+      <section class="work reveal">
         <div class="container">
-          <div class="featured__header">
-            <h2 class="featured__title">Featured Projects</h2>
-            <a href="/projects" class="featured__link">
-              View all
+          <div class="section-head">
+            <h2 class="section-head__title">Selected work</h2>
+            <a href="/projects" class="section-head__link">
+              All projects
               <Icon name="arrow-right" size={14} />
             </a>
           </div>
-          <div class="card-grid">
-            {featuredProjects.map((project) => (
-              <ProjectCard
+          <div class="project-list">
+            {featuredProjects.map((project, i) => (
+              <ProjectRow
+                index={i + 1}
                 title={project.data.title}
                 description={project.data.description}
                 tags={project.data.tags}
                 slug={project.id}
+                date={project.data.date}
                 url={project.data.url}
                 repo={project.data.repo}
               />
@@ -45,31 +47,7 @@ const featuredProjects = (await getCollection('projects'))
 </BaseLayout>
 
 <style>
-  .featured {
-    padding: var(--space-2xl) 0 var(--space-4xl);
-  }
-
-  .featured__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--space-xl);
-  }
-
-  .featured__title {
-    font-size: var(--text-2xl);
-  }
-
-  .featured__link {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-
-    &:hover {
-      color: var(--color-accent);
-    }
+  .work {
+    padding: var(--space-2xl) 0 var(--space-3xl);
   }
 </style>

@@ -29,49 +29,57 @@ if (project.data.readme && !readmeHtml && !project.body?.trim()) {
       'Set GITHUB_TOKEN to avoid API rate limits, or add body content to the markdown file.',
   );
 }
+
+const hasLinks = Boolean(project.data.url || project.data.repo);
 ---
 
 <BaseLayout title={`${project.data.title} — ${SITE.name}`} description={project.data.description}>
   <article class="project">
     <div class="container container--narrow">
       <header class="project__header">
-        <BackLink href="/projects" label="Back to projects" />
+        <BackLink href="/projects" label="All projects" />
         <h1 class="project__title">{project.data.title}</h1>
-        <p class="project__desc">{project.data.description}</p>
+        <p class="lede project__desc">{project.data.description}</p>
 
-        <div class="project__meta">
-          <div class="project__tags">
-            {project.data.tags.map((tag) => <span class="tag">{tag}</span>)}
+        <dl class="meta">
+          <div>
+            <dt>Stack</dt>
+            <dd>
+              <ul class="tags">{project.data.tags.map((tag) => <li>{tag}</li>)}</ul>
+            </dd>
           </div>
-          <div class="project__links">
-            {
-              project.data.url && (
-                <a
-                  href={project.data.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="project__link"
-                >
-                  Live Demo<span class="sr-only"> (opens in new window)</span>
-                  <Icon name="arrow-up-right" size={12} />
-                </a>
-              )
-            }
-            {
-              project.data.repo && (
-                <a
-                  href={project.data.repo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="project__link"
-                >
-                  Source Code<span class="sr-only"> (opens in new window)</span>
-                  <Icon name="arrow-up-right" size={12} />
-                </a>
-              )
-            }
+          <div>
+            <dt>Year</dt>
+            <dd>{project.data.date.getFullYear()}</dd>
           </div>
-        </div>
+          {
+            hasLinks && (
+              <div>
+                <dt>Links</dt>
+                <dd>
+                  <ul class="links project__links">
+                    {project.data.url && (
+                      <li>
+                        <a href={project.data.url} target="_blank" rel="noopener noreferrer">
+                          Live<span class="sr-only"> (opens in new window)</span>
+                          <Icon name="arrow-up-right" size={12} />
+                        </a>
+                      </li>
+                    )}
+                    {project.data.repo && (
+                      <li>
+                        <a href={project.data.repo} target="_blank" rel="noopener noreferrer">
+                          Source<span class="sr-only"> (opens in new window)</span>
+                          <Icon name="arrow-up-right" size={12} />
+                        </a>
+                      </li>
+                    )}
+                  </ul>
+                </dd>
+              </div>
+            )
+          }
+        </dl>
       </header>
 
       <div class="project__content">
@@ -88,45 +96,20 @@ if (project.data.readme && !readmeHtml && !project.body?.trim()) {
 
   .project__header {
     margin-bottom: var(--space-2xl);
-    padding-bottom: var(--space-2xl);
-    border-bottom: 1px solid var(--color-border);
   }
 
   .project__title {
-    font-size: var(--text-3xl);
-    margin-bottom: var(--space-sm);
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-md);
   }
 
   .project__desc {
     color: var(--color-text-muted);
-    font-size: var(--text-lg);
-    margin-bottom: var(--space-lg);
-  }
-
-  .project__meta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-md);
-  }
-
-  .project__tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-xs);
+    margin-bottom: var(--space-xl);
   }
 
   .project__links {
-    display: flex;
     gap: var(--space-md);
-  }
-
-  .project__link {
-    font-family: var(--font-mono);
     font-size: var(--text-sm);
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
   }
 </style>

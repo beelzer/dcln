@@ -1,94 +1,108 @@
 ---
+import Icon from './Icon.astro';
 import { SITE } from '../lib/constants';
 ---
 
 <section class="hero">
   <div class="hero__inner container">
-    <p class="hero__greeting">Hi, I'm</p>
-    <h1 class="hero__name">{SITE.author}</h1>
-    <p class="hero__tagline">I build things for the web.</p>
-    <div class="hero__cta">
-      <a href="/projects" class="btn btn--primary">View Projects</a>
-      <a href="/about" class="btn btn--ghost">About Me</a>
-    </div>
-    <div class="hero__decoration" aria-hidden="true">
-      <div class="hero__line"></div>
-    </div>
+    <p class="eyebrow hero__eyebrow">{SITE.author} · {SITE.tagline}</p>
+    <h1 class="hero__headline">
+      Small tools, <em>vibe-coded</em> experiments &amp; the occasional useful thing.
+    </h1>
+    <p class="hero__lede">
+      A running index of what I've shipped — mostly for fun, all in the open.
+    </p>
+    <ul class="links hero__links">
+      <li>
+        <a href="/projects">
+          Projects
+          <Icon name="arrow-right" size={14} />
+        </a>
+      </li>
+      <li><a href="/about">About</a></li>
+      <li>
+        <a href={SITE.github} target="_blank" rel="noopener noreferrer">
+          GitHub<span class="sr-only"> (opens in new window)</span>
+          <Icon name="arrow-up-right" size={12} />
+        </a>
+      </li>
+    </ul>
   </div>
 </section>
 
 <style>
   .hero {
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: center;
-    min-height: calc(100dvh - var(--header-height));
+    min-height: calc(90dvh - var(--header-height));
     padding: var(--space-4xl) 0;
+
+    /* Oversized brand glyph, sunk into the background */
+    &::after {
+      content: 'd.' / '';
+      position: absolute;
+      right: 0.02em;
+      bottom: -0.16em;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-size: clamp(11rem, 28vw, 24rem);
+      line-height: 1;
+      color: var(--color-bg-elevated);
+      pointer-events: none;
+      user-select: none;
+    }
   }
 
   .hero__inner {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
+    gap: var(--space-lg);
   }
 
-  .hero__greeting {
-    font-family: var(--font-mono);
-    font-size: var(--text-base);
-    color: var(--color-accent);
+  .hero__headline {
+    font-size: var(--text-5xl);
+    font-weight: 600;
+    max-width: 14ch;
+
+    em {
+      font-style: italic;
+      color: var(--color-accent);
+    }
   }
 
-  .hero__name {
-    font-size: var(--text-4xl);
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    color: var(--color-text);
-  }
-
-  .hero__tagline {
-    font-size: var(--text-xl);
+  .hero__lede {
+    font-size: var(--text-lg);
     color: var(--color-text-muted);
-    max-width: 500px;
+    max-width: 44ch;
   }
 
-  .hero__cta {
-    display: flex;
-    gap: var(--space-md);
-    margin-top: var(--space-lg);
+  .hero__links {
+    margin-top: var(--space-sm);
   }
 
   /* Only animate on first page load, not on view transition navigations */
   @media (prefers-reduced-motion: no-preference) {
-    .hero__greeting {
+    .hero__eyebrow {
       animation: fadeUp 0.6s var(--ease-out) both;
     }
-    .hero__name {
-      animation: fadeUp 0.6s var(--ease-out) 0.1s both;
+    .hero__headline {
+      animation: fadeUp 0.6s var(--ease-out) 0.08s both;
     }
-    .hero__tagline {
-      animation: fadeUp 0.6s var(--ease-out) 0.2s both;
+    .hero__lede {
+      animation: fadeUp 0.6s var(--ease-out) 0.16s both;
     }
-    .hero__cta {
-      animation: fadeUp 0.6s var(--ease-out) 0.3s both;
+    .hero__links {
+      animation: fadeUp 0.6s var(--ease-out) 0.24s both;
     }
-    .hero__decoration {
-      animation: fadeUp 0.6s var(--ease-out) 0.4s both;
-    }
-  }
-
-  .hero__decoration {
-    margin-top: var(--space-3xl);
-  }
-
-  .hero__line {
-    width: 60px;
-    height: 1px;
-    background: var(--color-border);
   }
 
   @keyframes fadeUp {
     from {
       opacity: 0;
-      transform: translateY(16px);
+      transform: translateY(14px);
     }
     to {
       opacity: 1;
@@ -98,16 +112,8 @@ import { SITE } from '../lib/constants';
 
   @media (max-width: 640px) {
     .hero {
-      min-height: calc(80dvh - var(--header-height));
-    }
-
-    .hero__cta {
-      flex-direction: column;
-    }
-
-    .hero__cta :global(.btn) {
-      text-align: center;
-      justify-content: center;
+      min-height: calc(75dvh - var(--header-height));
+      padding: var(--space-3xl) 0;
     }
   }
 </style>
