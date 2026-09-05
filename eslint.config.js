@@ -1,23 +1,16 @@
+// @ts-check
+import { defineConfig, globalIgnores } from 'eslint/config';
+import tseslint from 'typescript-eslint';
 import eslintPluginAstro from 'eslint-plugin-astro';
-import tseslint from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
 
-export default [
-  {
-    ignores: ['dist/', '.astro/', 'node_modules/', '.wrangler/'],
-  },
+export default defineConfig([
+  globalIgnores(['dist/', '.astro/', 'node_modules/', '.wrangler/', 'playwright-report/']),
+  ...tseslint.configs.recommended,
   ...eslintPluginAstro.configs.recommended,
   {
     files: ['**/*.ts'],
-    languageOptions: {
-      parser: tsParser,
-    },
-    plugins: {
-      '@typescript-eslint': tseslint,
-    },
     rules: {
-      'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     },
   },
-];
+]);

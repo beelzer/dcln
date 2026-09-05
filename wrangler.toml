@@ -1,3 +1,4 @@
 name = "dcln"
-compatibility_date = "2025-01-01"
+main = "@astrojs/cloudflare/entrypoints/server"
+compatibility_date = "2026-09-01"
 compatibility_flags = ["nodejs_compat"]

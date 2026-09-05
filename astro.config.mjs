@@ -10,6 +10,8 @@ const { version } = JSON.parse(readFileSync('./package.json', 'utf-8'));
 
 export default defineConfig({
   site: 'https://dcln.me',
+  // OG images read font files and WASM from node_modules at build time,
+  // which needs Node rather than workerd.
   adapter: cloudflare({ prerenderEnvironment: 'node' }),
   integrations: [sitemap()],
   vite: {
