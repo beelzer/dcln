@@ -2,3 +2,7 @@ name = "dcln"
 main = "@astrojs/cloudflare/entrypoints/server"
 compatibility_date = "2026-09-01"
 compatibility_flags = ["nodejs_compat"]
+
+# The site is only served from dcln.me, where Cloudflare Access protects
+# /private. Disable the *.workers.dev route so there is no unguarded copy.
+workers_dev = false
