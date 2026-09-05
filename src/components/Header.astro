@@ -1,6 +1,4 @@
 ---
-import Icon from './Icon.astro';
-
 const pathname = Astro.url.pathname;
 
 const links = [
@@ -16,20 +14,6 @@ const links = [
     <a href="/" class="header__logo">
       dcln<span class="header__logo-dot">.</span>me
     </a>
-
-    <input type="checkbox" id="nav-toggle" class="header__toggle-input sr-only" />
-    <label
-      for="nav-toggle"
-      class="header__toggle"
-      aria-label="Toggle navigation"
-      aria-expanded="false"
-      role="button"
-    >
-      <span class="header__toggle-bar"></span>
-      <span class="header__toggle-bar"></span>
-      <span class="header__toggle-bar"></span>
-    </label>
-
     <ul class="header__links">
       {
         links.map(({ href, label }) => {
@@ -41,9 +25,6 @@ const links = [
                 class:list={['header__link', { 'header__link--active': active }]}
                 aria-current={active ? 'page' : undefined}
               >
-                {label === 'Private' && (
-                  <Icon name="lock-closed" size={13} class="header__lock-icon" />
-                )}
                 {label}
               </a>
             </li>
@@ -54,58 +35,25 @@ const links = [
   </nav>
 </header>
 
-<script>
-  // This script runs once per full page load, but view transitions swap
-  // the DOM underneath it — so handlers delegate from `document` and
-  // query the current elements on every event instead of capturing them.
-  function getToggle() {
-    return document.getElementById('nav-toggle') as HTMLInputElement | null;
-  }
-
-  function syncAriaExpanded() {
-    document
-      .querySelector('.header__toggle')
-      ?.setAttribute('aria-expanded', String(getToggle()?.checked ?? false));
-  }
-
-  document.addEventListener('change', (e) => {
-    if ((e.target as HTMLElement | null)?.id === 'nav-toggle') {
-      syncAriaExpanded();
-    }
-  });
-
-  document.addEventListener('keydown', (e) => {
-    const toggle = getToggle();
-    if (e.key === 'Escape' && toggle?.checked) {
-      toggle.checked = false;
-      syncAriaExpanded();
-    }
-  });
-</script>
-
 <style>
   .header {
-    position: sticky;
-    top: 0;
-    z-index: var(--z-header);
-    background: color-mix(in oklch, var(--color-bg) 82%, transparent);
-    backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--color-border);
   }
 
   .header__nav {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
-    height: var(--header-height);
+    gap: var(--space-sm) var(--space-lg);
+    min-height: var(--header-height);
+    padding-block: var(--space-sm);
   }
 
   .header__logo {
     font-family: var(--font-mono);
-    font-size: var(--text-lg);
     font-weight: 700;
     color: var(--color-text);
-    letter-spacing: -0.03em;
     text-decoration: none;
 
     &:hover {
@@ -119,7 +67,8 @@ const links = [
 
   .header__links {
     display: flex;
-    gap: var(--space-xl);
+    flex-wrap: wrap;
+    gap: var(--space-lg);
     list-style: none;
   }
 
@@ -127,113 +76,14 @@ const links = [
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     color: var(--color-text-muted);
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-    padding: var(--space-xs) 0;
-    position: relative;
     text-decoration: none;
-    transition: color var(--duration-fast) var(--ease-out);
-
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--color-accent);
-      transition: width var(--duration-normal) var(--ease-out);
-    }
 
     &:hover {
       color: var(--color-text);
-
-      &::after {
-        width: 100%;
-      }
     }
   }
 
   .header__link--active {
-    color: var(--color-accent);
-
-    &::after {
-      width: 100%;
-    }
-
-    &:hover {
-      color: var(--color-accent);
-    }
-  }
-
-  .header__lock-icon {
-    width: 13px;
-    height: 13px;
-    flex-shrink: 0;
-  }
-
-  /* Mobile hamburger */
-  .header__toggle {
-    display: none;
-    flex-direction: column;
-    gap: 4px;
-    cursor: pointer;
-    padding: var(--space-sm);
-  }
-
-  .header__toggle-bar {
-    display: block;
-    width: 20px;
-    height: 2px;
-    background: var(--color-text);
-    border-radius: 1px;
-    transition:
-      transform var(--duration-normal) var(--ease-out),
-      opacity var(--duration-fast);
-  }
-
-  @media (max-width: 640px) {
-    .header__toggle {
-      display: flex;
-    }
-
-    .header__links {
-      position: fixed;
-      inset: var(--header-height) 0 0 0;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-2xl);
-      background: var(--color-bg);
-      transform: translateY(-100%);
-      opacity: 0;
-      transition:
-        transform var(--duration-normal) var(--ease-out),
-        opacity var(--duration-normal) var(--ease-out);
-      pointer-events: none;
-    }
-
-    .header__link {
-      font-size: var(--text-xl);
-    }
-
-    .header__toggle-input:checked ~ .header__links {
-      transform: translateY(0);
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .header__toggle-input:checked ~ .header__toggle {
-      .header__toggle-bar:nth-child(1) {
-        transform: translateY(6px) rotate(45deg);
-      }
-      .header__toggle-bar:nth-child(2) {
-        opacity: 0;
-      }
-      .header__toggle-bar:nth-child(3) {
-        transform: translateY(-6px) rotate(-45deg);
-      }
-    }
+    color: var(--color-text);
   }
 </style>

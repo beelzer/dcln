@@ -6,9 +6,9 @@ test.describe('Navigation', () => {
     await expect(page).toHaveTitle(/dcln\.me/);
   });
 
-  test('homepage shows selected work heading', async ({ page }) => {
+  test('homepage lists projects', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('h2', { hasText: 'Selected work' })).toBeVisible();
+    await expect(page.locator('article').first()).toBeVisible();
   });
 
   test('projects page renders correctly', async ({ page }) => {
@@ -18,7 +18,7 @@ test.describe('Navigation', () => {
 
   test('about page renders correctly', async ({ page }) => {
     await page.goto('/about/');
-    await expect(page.locator('h1', { hasText: 'Declan' })).toBeVisible();
+    await expect(page.locator('h1', { hasText: 'About' })).toBeVisible();
   });
 
   test('nav links point to correct pages', async ({ page }) => {

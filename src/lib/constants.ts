@@ -3,10 +3,8 @@ declare const __VERSION__: string;
 
 export const SITE = {
   name: 'dcln.me',
-  title: 'dcln.me — Declan',
-  description: 'Portfolio & projects by Declan',
-  author: 'Declan',
-  tagline: 'I build things for the web.',
+  title: 'dcln.me',
+  description: 'Small projects and experiments for the web.',
   email: 'contact@dcln.me',
   github: 'https://github.com/beelzer',
   cfAccessTeamDomain: 'https://dcln-me.cloudflareaccess.com',
@@ -26,11 +24,10 @@ export const SITE = {
  * Keep in sync with the design tokens in `src/styles/global.css`.
  */
 export const THEME = {
-  bg: '#0d0b08',
-  bgElevated: '#1e1a16',
-  text: '#ece7df',
-  textMuted: '#9e978e',
-  accent: '#f5ae39',
+  bg: '#0a0a0a',
+  text: '#e6e6e6',
+  textMuted: '#8a8a8a',
+  accent: '#3b82f6',
 } as const;
 
 /**

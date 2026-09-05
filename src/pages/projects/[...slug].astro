@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BackLink from '../../components/BackLink.astro';
-import Icon from '../../components/Icon.astro';
 import { getCollection, render } from 'astro:content';
 import { SITE } from '../../lib/constants';
 import { fetchReadmeHtml } from '../../lib/github';
@@ -34,82 +33,51 @@ const hasLinks = Boolean(project.data.url || project.data.repo);
 ---
 
 <BaseLayout title={`${project.data.title} — ${SITE.name}`} description={project.data.description}>
-  <article class="project">
-    <div class="container container--narrow">
-      <header class="project__header">
-        <BackLink href="/projects" label="All projects" />
-        <h1 class="project__title">{project.data.title}</h1>
-        <p class="lede project__desc">{project.data.description}</p>
+  <article class="page container">
+    <BackLink href="/projects" label="All projects" />
+    <h1 class="page__title">{project.data.title}</h1>
+    <p class="page__lede">{project.data.description}</p>
 
-        <dl class="meta">
-          <div>
-            <dt>Stack</dt>
+    <dl class="meta project__meta">
+      <dt>Stack</dt>
+      <dd>
+        <ul class="tags">{project.data.tags.map((tag) => <li>{tag}</li>)}</ul>
+      </dd>
+      {
+        hasLinks && (
+          <Fragment>
+            <dt>Links</dt>
             <dd>
-              <ul class="tags">{project.data.tags.map((tag) => <li>{tag}</li>)}</ul>
+              <ul class="links">
+                {project.data.url && (
+                  <li>
+                    <a href={project.data.url} target="_blank" rel="noopener noreferrer">
+                      Live<span class="sr-only"> (opens in new window)</span>
+                    </a>
+                  </li>
+                )}
+                {project.data.repo && (
+                  <li>
+                    <a href={project.data.repo} target="_blank" rel="noopener noreferrer">
+                      Source<span class="sr-only"> (opens in new window)</span>
+                    </a>
+                  </li>
+                )}
+              </ul>
             </dd>
-          </div>
-          <div>
-            <dt>Year</dt>
-            <dd>{project.data.date.getFullYear()}</dd>
-          </div>
-          {
-            hasLinks && (
-              <div>
-                <dt>Links</dt>
-                <dd>
-                  <ul class="links project__links">
-                    {project.data.url && (
-                      <li>
-                        <a href={project.data.url} target="_blank" rel="noopener noreferrer">
-                          Live<span class="sr-only"> (opens in new window)</span>
-                          <Icon name="arrow-up-right" size={12} />
-                        </a>
-                      </li>
-                    )}
-                    {project.data.repo && (
-                      <li>
-                        <a href={project.data.repo} target="_blank" rel="noopener noreferrer">
-                          Source<span class="sr-only"> (opens in new window)</span>
-                          <Icon name="arrow-up-right" size={12} />
-                        </a>
-                      </li>
-                    )}
-                  </ul>
-                </dd>
-              </div>
-            )
-          }
-        </dl>
-      </header>
+          </Fragment>
+        )
+      }
+    </dl>
 
-      <div class="project__content">
-        {readmeHtml ? <Fragment set:html={readmeHtml} /> : <Content />}
-      </div>
+    <div class="project__content">
+      {readmeHtml ? <Fragment set:html={readmeHtml} /> : <Content />}
     </div>
   </article>
 </BaseLayout>
 
 <style>
-  .project {
-    padding: var(--space-3xl) 0;
-  }
-
-  .project__header {
-    margin-bottom: var(--space-2xl);
-  }
-
-  .project__title {
-    font-size: var(--text-4xl);
-    margin-bottom: var(--space-md);
-  }
-
-  .project__desc {
-    color: var(--color-text-muted);
+  .project__meta {
     margin-bottom: var(--space-xl);
-  }
-
-  .project__links {
-    gap: var(--space-md);
-    font-size: var(--text-sm);
   }
 </style>

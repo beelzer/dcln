@@ -1,43 +1,27 @@
 ---
-import Icon from './Icon.astro';
-
 interface Props {
-  index: number;
   title: string;
   description: string;
   tags: string[];
   slug: string;
-  date: Date;
   url?: string;
   repo?: string;
 }
 
-const { index, title, description, tags, slug, date, url, repo } = Astro.props;
-const number = String(index).padStart(2, '0');
+const { title, description, tags, slug, url, repo } = Astro.props;
 ---
 
 <article class="row">
-  <span class="row__index" aria-hidden="true">{number}</span>
-
-  <div class="row__body">
-    <h3 class="row__title">
-      <a href={`/projects/${slug}`} class="row__link">{title}</a>
-    </h3>
-    <p class="row__desc">{description}</p>
+  <h2 class="row__title"><a href={`/projects/${slug}`}>{title}</a></h2>
+  <p class="row__desc">{description}</p>
+  <div class="row__meta">
     <ul class="tags">{tags.map((tag) => <li>{tag}</li>)}</ul>
-  </div>
-
-  <div class="row__aside">
-    <time class="row__year" datetime={date.toISOString().slice(0, 10)}>
-      {date.getFullYear()}
-    </time>
-    <ul class="links row__links">
+    <ul class="links">
       {
         url && (
           <li>
             <a href={url} target="_blank" rel="noopener noreferrer">
               Live<span class="sr-only"> (opens in new window)</span>
-              <Icon name="arrow-up-right" size={12} />
             </a>
           </li>
         )
@@ -47,7 +31,6 @@ const number = String(index).padStart(2, '0');
           <li>
             <a href={repo} target="_blank" rel="noopener noreferrer">
               Source<span class="sr-only"> (opens in new window)</span>
-              <Icon name="arrow-up-right" size={12} />
             </a>
           </li>
         )
@@ -58,88 +41,33 @@ const number = String(index).padStart(2, '0');
 
 <style>
   .row {
-    position: relative;
-    display: grid;
-    grid-template-columns: 3rem 1fr auto;
-    gap: var(--space-md) var(--space-lg);
-    align-items: start;
     padding: var(--space-lg) 0;
     border-bottom: 1px solid var(--color-border);
   }
 
-  .row__index {
-    padding-top: 0.45em;
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--color-text-faint);
-    transition: color var(--duration-fast) var(--ease-out);
-  }
-
   .row__title {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-    line-height: var(--leading-snug);
-  }
+    font-size: var(--text-lg);
 
-  .row__link {
-    color: var(--color-text);
-    text-decoration: none;
+    a {
+      text-decoration: none;
 
-    /* Stretch the title link over the whole row */
-    &::before {
-      content: '';
-      position: absolute;
-      inset: 0;
+      &:hover {
+        text-decoration: underline;
+      }
     }
-
-    &:hover {
-      color: var(--color-accent);
-    }
-  }
-
-  .row:has(.row__link:hover) .row__index {
-    color: var(--color-accent);
   }
 
   .row__desc {
     margin: var(--space-xs) 0 var(--space-sm);
-    max-width: 60ch;
-    font-size: var(--text-sm);
     color: var(--color-text-muted);
-  }
-
-  .row__aside {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: var(--space-sm);
-  }
-
-  .row__year {
-    font-family: var(--font-mono);
     font-size: var(--text-sm);
-    color: var(--color-text-faint);
   }
 
-  .row__links {
-    gap: var(--space-md);
-    font-size: var(--text-xs);
-  }
-
-  @media (max-width: 640px) {
-    .row {
-      grid-template-columns: 2.5rem 1fr;
-    }
-
-    .row__aside {
-      grid-column: 2;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-    }
+  .row__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-sm) var(--space-md);
   }
 </style>
