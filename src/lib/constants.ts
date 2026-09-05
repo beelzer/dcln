@@ -14,7 +14,7 @@ export const SITE = {
    * Access → Applications → <app> → Overview. When set, JWTs must
    * carry this audience; when empty, the check is skipped.
    */
-  cfAccessAud: '',
+  cfAccessAud: '573c448a3696f9d7cb54ca0fedfd53a1d7848e2883fa6d69b0df4447aecd6c65',
   featuredProjectsLimit: 3,
   version: __VERSION__,
   commitHash: __COMMIT_HASH__,
