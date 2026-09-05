@@ -4,8 +4,7 @@ import { SITE, JWKS_CACHE_DURATION_MS, JWT_NBF_TOLERANCE_S } from '../constants'
 describe('SITE', () => {
   it('has required string properties', () => {
     expect(SITE.name).toBe('dcln.me');
-    expect(SITE.title).toBe('dcln.me — Declan');
-    expect(SITE.author).toBe('Declan');
+    expect(SITE.title).toBe('dcln.me');
     expect(SITE.email).toBe('contact@dcln.me');
     expect(SITE.github).toBe('https://github.com/beelzer');
   });

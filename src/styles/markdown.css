@@ -145,12 +145,10 @@
 
   .project__content a {
     color: var(--color-accent);
-    text-decoration-color: var(--color-accent-line);
   }
 
   .project__content a:hover {
     color: var(--color-accent-hover);
-    text-decoration-color: var(--color-accent-hover);
   }
 
   /* --- Inline Elements --- */

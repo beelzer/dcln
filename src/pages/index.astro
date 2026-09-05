@@ -1,53 +1,55 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
 import ProjectRow from '../components/ProjectRow.astro';
-import Icon from '../components/Icon.astro';
 import { getCollection } from 'astro:content';
 import { SITE } from '../lib/constants';
 
-const featuredProjects = (await getCollection('projects'))
-  .filter((p) => p.data.featured)
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .slice(0, SITE.featuredProjectsLimit);
+const all = (await getCollection('projects')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+const featured = all.filter((p) => p.data.featured);
+const projects = (featured.length > 0 ? featured : all).slice(0, SITE.featuredProjectsLimit);
 ---
 
 <BaseLayout>
-  <Hero />
+  <section class="page container">
+    <h1 class="intro">{SITE.description}</h1>
 
-  {
-    featuredProjects.length > 0 && (
-      <section class="work reveal">
-        <div class="container">
-          <div class="section-head">
-            <h2 class="section-head__title">Selected work</h2>
-            <a href="/projects" class="section-head__link">
-              All projects
-              <Icon name="arrow-right" size={14} />
-            </a>
-          </div>
-          <div class="project-list">
-            {featuredProjects.map((project, i) => (
-              <ProjectRow
-                index={i + 1}
-                title={project.data.title}
-                description={project.data.description}
-                tags={project.data.tags}
-                slug={project.id}
-                date={project.data.date}
-                url={project.data.url}
-                repo={project.data.repo}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-    )
-  }
+    <div class="project-list">
+      {
+        projects.map((project) => (
+          <ProjectRow
+            title={project.data.title}
+            description={project.data.description}
+            tags={project.data.tags}
+            slug={project.id}
+            url={project.data.url}
+            repo={project.data.repo}
+          />
+        ))
+      }
+    </div>
+
+    {
+      all.length > projects.length && (
+        <p class="more">
+          <a href="/projects">All projects &rarr;</a>
+        </p>
+      )
+    }
+  </section>
 </BaseLayout>
 
 <style>
-  .work {
-    padding: var(--space-2xl) 0 var(--space-3xl);
+  .intro {
+    font-size: var(--text-xl);
+    font-weight: 500;
+    margin-bottom: var(--space-xl);
+    max-width: 36ch;
+  }
+
+  .more {
+    margin-top: var(--space-lg);
+    font-size: var(--text-sm);
   }
 </style>

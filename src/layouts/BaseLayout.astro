@@ -1,12 +1,6 @@
 ---
-import { ClientRouter } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import '@fontsource/fraunces/400.css';
-import '@fontsource/fraunces/400-italic.css';
-import '@fontsource/fraunces/600.css';
-import '@fontsource/fraunces/600-italic.css';
-import '@fontsource-variable/jetbrains-mono/wght.css';
 import '../styles/global.css';
 import { SITE, THEME } from '../lib/constants';
 
@@ -60,16 +54,14 @@ const ogImage = new URL(`/og/${ogRoute}.png`, Astro.site).href;
       type="application/ld+json"
       set:html={JSON.stringify({
         '@context': 'https://schema.org',
-        '@type': 'Person',
-        name: SITE.author,
+        '@type': 'WebSite',
+        name: SITE.name,
         url: Astro.site?.href,
         sameAs: [SITE.github],
-        email: SITE.email,
       })}
     />
 
     <title>{title}</title>
-    <ClientRouter />
   </head>
   <body>
     <a href="#main" class="skip-link">Skip to content</a>
@@ -78,21 +70,6 @@ const ogImage = new URL(`/og/${ogRoute}.png`, Astro.site).href;
       <slot />
     </main>
     <Footer />
-
-    <script>
-      import type { TransitionBeforeSwapEvent } from 'astro:transitions/client';
-
-      let inflightTransition: ViewTransition | null = null;
-
-      document.addEventListener('astro:before-swap', (e) => {
-        inflightTransition?.skipTransition();
-        inflightTransition = (e as TransitionBeforeSwapEvent).viewTransition;
-      });
-
-      document.addEventListener('astro:after-swap', () => {
-        inflightTransition = null;
-      });
-    </script>
   </body>
 </html>
 
@@ -104,11 +81,10 @@ const ogImage = new URL(`/og/${ogRoute}.png`, Astro.site).href;
     z-index: calc(var(--z-header) + 1);
     padding: var(--space-sm) var(--space-md);
     background: var(--color-accent);
-    color: var(--color-accent-ink);
-    font-family: var(--font-mono);
-    text-decoration: none;
+    color: #fff;
     font-size: var(--text-sm);
     border-radius: var(--radius-sm);
+    text-decoration: none;
 
     &:focus {
       top: var(--space-sm);
@@ -118,11 +94,5 @@ const ogImage = new URL(`/og/${ogRoute}.png`, Astro.site).href;
   main {
     /* header + footer approximate combined height */
     min-height: calc(100dvh - var(--header-height) - 80px);
-  }
-
-  /* Quick crossfade — both pages overlap so no flash */
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation-duration: 80ms;
   }
 </style>

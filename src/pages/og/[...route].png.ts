@@ -5,11 +5,11 @@ import { Resvg, initWasm } from '@resvg/resvg-wasm';
 import { readFileSync } from 'node:fs';
 import { SITE, THEME } from '../../lib/constants';
 
-// satori reads WOFF (not WOFF2), which the static fontsource package ships.
-const fontDir = 'node_modules/@fontsource/fraunces/files';
-const fraunces = readFileSync(`${fontDir}/fraunces-latin-400-normal.woff`);
-const frauncesItalic = readFileSync(`${fontDir}/fraunces-latin-400-italic.woff`);
-const frauncesSemiBold = readFileSync(`${fontDir}/fraunces-latin-600-normal.woff`);
+// The site itself uses system fonts; Inter is only a build-time dependency
+// here because satori needs font data (WOFF, not WOFF2) to render text.
+const fontDir = 'node_modules/@fontsource/inter/files';
+const interRegular = readFileSync(`${fontDir}/inter-latin-400-normal.woff`);
+const interSemiBold = readFileSync(`${fontDir}/inter-latin-600-normal.woff`);
 
 await initWasm(readFileSync('node_modules/@resvg/resvg-wasm/index_bg.wasm'));
 
@@ -22,11 +22,8 @@ const projects = await getCollection('projects');
 
 const pages: Record<string, OGPage> = {
   index: { title: SITE.name, description: SITE.description },
-  about: { title: `About — ${SITE.name}`, description: `About ${SITE.author}` },
-  projects: {
-    title: `Projects — ${SITE.name}`,
-    description: 'A collection of projects and experiments',
-  },
+  about: { title: `About — ${SITE.name}`, description: 'About this site' },
+  projects: { title: `Projects — ${SITE.name}`, description: 'Projects and experiments' },
   ...Object.fromEntries(
     projects.map((project) => [
       `projects/${project.id}`,
@@ -50,40 +47,22 @@ export const GET: APIRoute = async ({ params }) => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'flex-end',
-          position: 'relative',
-          overflow: 'hidden',
           width: 1200,
           height: 630,
           padding: 64,
           background: THEME.bg,
-          fontFamily: 'Fraunces',
+          fontFamily: 'Inter',
         },
         children: [
           {
             type: 'div',
             props: {
               style: {
-                position: 'absolute',
-                right: -10,
-                bottom: -150,
-                fontSize: 560,
-                fontStyle: 'italic',
-                lineHeight: 1,
-                color: THEME.bgElevated,
-              },
-              children: 'd.',
-            },
-          },
-          {
-            type: 'div',
-            props: {
-              style: {
-                fontSize: 64,
+                fontSize: 56,
                 fontWeight: 600,
                 color: THEME.text,
-                lineHeight: 1.05,
-                letterSpacing: -1,
-                maxWidth: 960,
+                lineHeight: 1.15,
+                marginBottom: 16,
               },
               children: page.title,
             },
@@ -91,33 +70,21 @@ export const GET: APIRoute = async ({ params }) => {
           {
             type: 'div',
             props: {
-              style: {
-                fontSize: 26,
-                color: THEME.textMuted,
-                lineHeight: 1.4,
-                marginTop: 18,
-                maxWidth: 900,
-              },
+              style: { fontSize: 26, color: THEME.textMuted, lineHeight: 1.4 },
               children: page.description,
             },
           },
           {
             type: 'div',
             props: {
-              style: { display: 'flex', alignItems: 'center', gap: 14, marginTop: 48 },
-              children: [
-                {
-                  type: 'div',
-                  props: { style: { width: 28, height: 2, background: THEME.accent } },
-                },
-                {
-                  type: 'div',
-                  props: {
-                    style: { fontSize: 22, fontStyle: 'italic', color: THEME.accent },
-                    children: SITE.name,
-                  },
-                },
-              ],
+              style: {
+                fontSize: 20,
+                fontWeight: 600,
+                color: THEME.accent,
+                marginTop: 'auto',
+                paddingTop: 40,
+              },
+              children: SITE.name,
             },
           },
         ],
@@ -127,9 +94,8 @@ export const GET: APIRoute = async ({ params }) => {
       width: 1200,
       height: 630,
       fonts: [
-        { name: 'Fraunces', data: fraunces, weight: 400, style: 'normal' as const },
-        { name: 'Fraunces', data: frauncesItalic, weight: 400, style: 'italic' as const },
-        { name: 'Fraunces', data: frauncesSemiBold, weight: 600, style: 'normal' as const },
+        { name: 'Inter', data: interRegular, weight: 400, style: 'normal' as const },
+        { name: 'Inter', data: interSemiBold, weight: 600, style: 'normal' as const },
       ],
     },
   );

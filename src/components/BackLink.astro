@@ -1,6 +1,4 @@
 ---
-import Icon from './Icon.astro';
-
 interface Props {
   href: string;
   label: string;
@@ -9,24 +7,19 @@ interface Props {
 const { href, label } = Astro.props;
 ---
 
-<a href={href} class="back-link">
-  <Icon name="arrow-left" size={14} />
-  {label}
-</a>
+<a href={href} class="back-link">&larr; {label}</a>
 
 <style>
   .back-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-xs);
-    margin-bottom: var(--space-xl);
+    display: inline-block;
+    margin-bottom: var(--space-lg);
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     color: var(--color-text-muted);
     text-decoration: none;
 
     &:hover {
-      color: var(--color-accent);
+      color: var(--color-text);
     }
   }
 </style>

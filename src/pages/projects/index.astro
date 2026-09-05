@@ -9,50 +9,33 @@ const projects = (await getCollection('projects')).sort(
 );
 ---
 
-<BaseLayout title={`Projects — ${SITE.name}`} description={`Projects built by ${SITE.author}`}>
-  <section class="projects">
-    <div class="container">
-      <header class="page-head">
-        <p class="eyebrow">Index · {projects.length}</p>
-        <h1 class="page-head__title projects__title">Projects</h1>
-        <p class="page-head__lede">Things I've built and tinkered with, newest first.</p>
-      </header>
+<BaseLayout title={`Projects — ${SITE.name}`} description="Projects and experiments">
+  <section class="page container">
+    <h1 class="page__title">Projects</h1>
+    <p class="page__lede">Things I've built and tinkered with, newest first.</p>
 
-      <div class="project-list reveal">
-        {
-          projects.map((project, i) => (
-            <ProjectRow
-              index={i + 1}
-              title={project.data.title}
-              description={project.data.description}
-              tags={project.data.tags}
-              slug={project.id}
-              date={project.data.date}
-              url={project.data.url}
-              repo={project.data.repo}
-            />
-          ))
-        }
-      </div>
-
-      {projects.length === 0 && <p class="projects__empty">No projects yet. Check back soon!</p>}
+    <div class="project-list">
+      {
+        projects.map((project) => (
+          <ProjectRow
+            title={project.data.title}
+            description={project.data.description}
+            tags={project.data.tags}
+            slug={project.id}
+            url={project.data.url}
+            repo={project.data.repo}
+          />
+        ))
+      }
     </div>
+
+    {projects.length === 0 && <p class="empty">No projects yet.</p>}
   </section>
 </BaseLayout>
 
 <style>
-  .projects {
-    padding: var(--space-3xl) 0;
-  }
-
-  .projects__title {
-    margin-top: var(--space-md);
-  }
-
-  .projects__empty {
-    padding: var(--space-4xl) 0;
-    text-align: center;
-    font-family: var(--font-mono);
-    color: var(--color-text-faint);
+  .empty {
+    padding: var(--space-2xl) 0;
+    color: var(--color-text-muted);
   }
 </style>
