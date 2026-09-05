@@ -1,12 +1,23 @@
 import { defineMiddleware } from 'astro:middleware';
 import { getAccessEmail } from './lib/auth';
-import { SECURITY_HEADERS } from './lib/constants';
+import { CSP_FRAME_ANCESTORS, SECURITY_HEADERS } from './lib/constants';
 
-/** Apply security headers to a server-rendered response. */
+/**
+ * Apply security headers to a server-rendered response.
+ *
+ * Astro already sets a Content-Security-Policy header on on-demand pages
+ * (with hashes for its inline scripts), so that one is extended rather
+ * than replaced.
+ */
 function withSecurityHeaders(response: Response): Response {
   for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
     response.headers.set(name, value);
   }
+  const csp = response.headers.get('Content-Security-Policy');
+  response.headers.set(
+    'Content-Security-Policy',
+    csp ? `${csp.replace(/;\s*$/, '')}; ${CSP_FRAME_ANCESTORS}` : CSP_FRAME_ANCESTORS,
+  );
   return response;
 }
 
