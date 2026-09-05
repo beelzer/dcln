@@ -155,10 +155,11 @@ const isAuthenticated = !!session;
       border-color var(--duration-normal) var(--ease-out),
       transform var(--duration-normal) var(--ease-out);
 
+    text-decoration: none;
+
     &:hover {
       border-color: var(--color-accent);
       color: var(--color-text);
-      transform: translateY(-2px);
     }
 
     svg {
@@ -167,9 +168,9 @@ const isAuthenticated = !!session;
   }
 
   .private__card-title {
-    font-family: var(--font-mono);
+    font-family: var(--font-display);
     font-weight: 600;
-    font-size: var(--text-lg);
+    font-size: var(--text-xl);
   }
 
   .private__card-desc {
@@ -192,6 +193,7 @@ const isAuthenticated = !!session;
 
   .private__logout {
     color: var(--color-text-faint);
+    text-decoration: none;
 
     &:hover {
       color: var(--color-accent);

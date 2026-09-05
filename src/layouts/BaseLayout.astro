@@ -8,7 +8,7 @@ import '@fontsource/fraunces/600.css';
 import '@fontsource/fraunces/600-italic.css';
 import '@fontsource-variable/jetbrains-mono/wght.css';
 import '../styles/global.css';
-import { SITE } from '../lib/constants';
+import { SITE, THEME } from '../lib/constants';
 
 interface Props {
   title?: string;
@@ -35,7 +35,8 @@ const ogImage = new URL(`/og/${ogRoute}.png`, Astro.site).href;
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL.href} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="theme-color" content={THEME.bg} />
+    <meta name="color-scheme" content="dark" />
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />
@@ -103,8 +104,9 @@ const ogImage = new URL(`/og/${ogRoute}.png`, Astro.site).href;
     z-index: calc(var(--z-header) + 1);
     padding: var(--space-sm) var(--space-md);
     background: var(--color-accent);
-    color: white;
+    color: var(--color-accent-ink);
     font-family: var(--font-mono);
+    text-decoration: none;
     font-size: var(--text-sm);
     border-radius: var(--radius-sm);
 
