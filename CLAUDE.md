@@ -37,8 +37,9 @@ Examples:
 - Minimize JavaScript — prefer Astro's zero-JS-by-default approach
 - All site-wide constants live in `src/lib/constants.ts`
 - CSS design tokens in `src/styles/global.css` `:root`; colours that non-CSS surfaces need (theme-color, OG images) are mirrored in `THEME` in `src/lib/constants.ts` — keep both in sync
-- Type: Fraunces (display, h1/h2, `.lede`), system-ui sans for body, JetBrains Mono Variable for labels/nav/code. Fonts are self-hosted via @fontsource; OG images read the static Fraunces WOFF files
-- Projects render as stacked rows (`ProjectRow.astro`), not cards; tags are plain mono text (`.tags`), not pills
+- Design is deliberately plain: one 720px column, system fonts only (no web fonts on pages; `@fontsource/inter` is a build-time dependency for OG images), no client-side JS, no decorative elements or animations
+- Public copy is impersonal: no personal name anywhere on the site, footer credits the site name, structured data is a `WebSite`, not a `Person`
+- Projects render as a simple list (`ProjectRow.astro`); tags are plain mono text (`.tags`), not pills
 
 ## Commands
 
