@@ -16,6 +16,11 @@ updates:
         update-types:
           - minor
           - patch
+    ignore:
+      # TypeScript 7 ships no JS API yet, so `astro check` (Volar) and
+      # typescript-eslint can't run on it until TS 7.1. Revisit then.
+      - dependency-name: typescript
+        update-types: ['version-update:semver-major']
     commit-message:
       prefix: 'chore'
       include: scope

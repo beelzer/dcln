@@ -8,3 +8,7 @@ readme: true
 featured: true
 date: 2026-05-19
 ---
+
+A set of file conversion utilities that run entirely in the browser, so nothing is uploaded anywhere. Built with Astro and Preact and hosted on Cloudflare.
+
+See the [source on GitHub](https://github.com/beelzer/tools) for the full README.

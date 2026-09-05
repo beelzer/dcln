@@ -32,7 +32,7 @@ Examples:
 
 ## Project
 
-- Astro 6 portfolio site deployed on Cloudflare Workers
+- Astro 7 portfolio site deployed on Cloudflare Workers (Node 24, npm 11)
 - Vanilla CSS only (no preprocessors, no CSS-in-JS)
 - Minimize JavaScript — prefer Astro's zero-JS-by-default approach
 - All site-wide constants live in `src/lib/constants.ts`
@@ -47,6 +47,7 @@ Examples:
 - `npm run check` — astro type checking
 - `npm run test:unit` — vitest unit tests
 - `npm run test:e2e` — playwright e2e tests (requires build first)
+- `npx astro preview` — serve `dist/` in workerd (runs in the background; `npx astro preview stop` to end it)
 
 ## Architecture
 
@@ -55,7 +56,9 @@ Examples:
 - Auth handled by Cloudflare Access (JWT verification in `src/lib/auth.ts`)
 - `src/middleware.ts` protects all `/private/*` sub-routes (auth guard)
 - OG images generated at build time via satori in `src/pages/og/[...route].png.ts`
-- `public/_headers` controls Cloudflare security headers
+- `public/_headers` sets security headers for static assets; `SECURITY_HEADERS` in `src/lib/constants.ts` does the same for SSR responses via middleware
+- The Content-Security-Policy is generated per page by Astro (`security.csp` in `astro.config.mjs`) with hashes for inline scripts; only `frame-ancestors` lives in headers
+- `astro preview` runs the built site in workerd; e2e tests use it as their web server
 
 ## Versioning (AUTOMATIC — do this on every commit and push)
 

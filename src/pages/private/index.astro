@@ -6,6 +6,10 @@ import Icon from '../../components/Icon.astro';
 import { getAccessSession } from '../../lib/auth';
 import { SITE } from '../../lib/constants';
 
+// Identity-provider avatars can come from any IdP host, so this page alone
+// widens img-src beyond the site-wide policy.
+Astro.csp?.insertDirective("img-src 'self' data: https:");
+
 const session = await getAccessSession(Astro.request);
 const isAuthenticated = !!session;
 ---

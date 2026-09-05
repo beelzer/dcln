@@ -25,9 +25,10 @@ export const SITE = {
  *
  * Cloudflare only applies `public/_headers` to static assets, so SSR
  * routes (the /private area) must set these themselves via middleware.
- * Keep in sync with `public/_headers` — the one intentional difference
- * is `img-src https:`, because Access identity-provider avatars can be
- * served from any IdP domain.
+ * Keep in sync with `public/_headers`. The Content-Security-Policy is
+ * emitted per page by Astro (see `security.csp` in astro.config.mjs);
+ * middleware appends CSP_FRAME_ANCESTORS to it because <meta> can't
+ * express that directive on prerendered pages.
  */
 export const SECURITY_HEADERS: Record<string, string> = {
   'X-Content-Type-Options': 'nosniff',
@@ -36,12 +37,13 @@ export const SECURITY_HEADERS: Record<string, string> = {
   'Referrer-Policy': 'strict-origin-when-cross-origin',
   'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
   'Strict-Transport-Security': 'max-age=31536000; includeSubDomains; preload',
-  'Content-Security-Policy':
-    "default-src 'none'; script-src 'self' static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self' cloudflareinsights.com; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; upgrade-insecure-requests",
   'Cross-Origin-Opener-Policy': 'same-origin',
   'Cross-Origin-Embedder-Policy': 'unsafe-none',
   'Cross-Origin-Resource-Policy': 'same-origin',
 };
+
+/** Appended to Astro's per-response CSP header on SSR routes. */
+export const CSP_FRAME_ANCESTORS = "frame-ancestors 'none'";
 
 /** How long to cache Cloudflare Access public keys (1 hour). */
 export const JWKS_CACHE_DURATION_MS = 60 * 60 * 1000;
