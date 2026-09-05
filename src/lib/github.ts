@@ -26,6 +26,11 @@ export async function fetchReadmeHtml(repoUrl: string): Promise<string | null> {
     return null;
   }
 
+  // Unauthenticated requests share a 60/hour per-IP rate limit, which CI
+  // runners regularly exhaust. This module only runs at build time
+  // (project pages are prerendered), so process.env is available.
+  const token = process.env.GITHUB_TOKEN;
+
   try {
     const response = await fetch(
       `https://api.github.com/repos/${parsed.owner}/${parsed.repo}/readme`,
@@ -33,6 +38,7 @@ export async function fetchReadmeHtml(repoUrl: string): Promise<string | null> {
         headers: {
           Accept: 'application/vnd.github.html',
           'User-Agent': 'dcln-portfolio',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       },
     );
