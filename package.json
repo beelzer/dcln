@@ -39,12 +39,12 @@
     ]
   },
   "dependencies": {
-    "@astrojs/cloudflare": "^14.3.0",
+    "@astrojs/cloudflare": "^14.3.3",
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource/inter": "^5.3.0",
     "@resvg/resvg-wasm": "^2.6.2",
-    "astro": "^7.3.1",
-    "satori": "^0.33.4",
+    "astro": "^7.3.5",
+    "satori": "^0.33.5",
     "shiki": "^4.4.3",
     "ultrahtml": "^1.7.0"
   },
@@ -57,19 +57,19 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
-    "@commitlint/cli": "^21.2.2",
+    "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.2",
     "@playwright/test": "^1.63.0",
-    "@types/node": "^26.4.1",
-    "eslint": "^10.10.0",
-    "eslint-plugin-astro": "^3.1.0",
+    "@types/node": "^26.6.3",
+    "eslint": "^10.11.0",
+    "eslint-plugin-astro": "^3.2.1",
     "husky": "^9.1.7",
-    "lint-staged": "^17.5.0",
-    "prettier": "^3.9.6",
+    "lint-staged": "^17.5.1",
+    "prettier": "^3.9.9",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.69.0",
-    "vitest": "^5.0.0"
+    "typescript-eslint": "^8.70.1",
+    "vitest": "^5.0.2"
   },
   "allowScripts": {
     "esbuild": true,
